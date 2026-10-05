@@ -1,0 +1,23 @@
+<db-loader [isVisible]="isLoading()"></db-loader>
+
+<div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+  <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Loader</h1>
+  <p class="mt-2 text-theme-sm text-gray-500 dark:text-gray-400">
+    Indicador de carga que cubre toda la ventana con un fondo translúcido y bloquea la interacción mientras
+    isVisible está en true. Selector: <code>&lt;db-loader&gt;</code>.
+  </p>
+</div>
+
+<div class="mt-6 grid gap-6">
+  <db-card
+    [title]="'Loader a pantalla completa'"
+    [desc]="'isVisible en true lo muestra; al volver a false se desvanece en 100 ms. Aquí se muestra durante 2 segundos.'"
+  >
+    <div class="flex flex-wrap items-center gap-3">
+      <db-button [startIcon]="'hourglass_top'" [disabled]="isLoading()" (btnClick)="showLoader()">
+        Mostrar loader ({{ durationMs / 1000 }} s)
+      </db-button>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+</div>

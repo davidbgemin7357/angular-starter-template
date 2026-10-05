@@ -1,0 +1,104 @@
+<div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+  <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Number Box</h1>
+  <p class="mt-2 text-theme-sm text-gray-500 dark:text-gray-400">
+    Campo numérico que filtra caracteres inválidos, aplica límites, controla decimales y ofrece
+    botones de incremento cuando se define step. Implementa ControlValueAccessor. Selector:
+    <code>&lt;db-numberbox&gt;</code>.
+  </p>
+</div>
+
+<div class="mt-6 grid gap-6">
+  <db-card [title]="'Básico'" [desc]="'Solo acepta dígitos y un signo negativo inicial. Sin decimals no admite decimales.'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-72">
+        <db-numberbox [label]="'Cantidad'" [placeholder]="'Ingresa un número'" (valueChange)="handleValue('Cantidad', $event)" />
+      </div>
+      <div class="w-full pt-2 sm:w-72">
+        <db-numberbox [label]="'Con valor inicial'" [value]="42" (valueChange)="handleValue('Con valor inicial', $event)" />
+      </div>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Mínimo y máximo'" [desc]="'min y max se pasan como string; al escribir un valor fuera de rango se ajusta al límite.'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-72">
+        <db-numberbox [label]="'Edad (1 a 120)'" [min]="'1'" [max]="'120'" (valueChange)="handleValue('Edad', $event)" />
+      </div>
+      <div class="w-full pt-2 sm:w-72">
+        <db-numberbox [label]="'Temperatura (-20 a 50)'" [min]="'-20'" [max]="'50'" (valueChange)="handleValue('Temperatura', $event)" />
+      </div>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Step'" [desc]="'step muestra botones de incremento/decremento y habilita las flechas del teclado, respetando min y max.'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-72">
+        <db-numberbox [label]="'Unidades (step 1, 0 a 10)'" [step]="1" [min]="'0'" [max]="'10'" [value]="5" (valueChange)="handleValue('Unidades', $event)" />
+      </div>
+      <div class="w-full pt-2 sm:w-72">
+        <db-numberbox [label]="'Múltiplos de 5'" [step]="5" [min]="'0'" [max]="'100'" (valueChange)="handleValue('Múltiplos de 5', $event)" />
+      </div>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Decimales'" [desc]="'decimals fija cuántos decimales se aceptan (coma o punto). Con step, el valor se formatea con esa cantidad de decimales.'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-72">
+        <db-numberbox [label]="'Precio (2 decimales)'" [decimals]="2" [placeholder]="'0.00'" (valueChange)="handleValue('Precio', $event)" />
+      </div>
+      <div class="w-full pt-2 sm:w-72">
+        <db-numberbox [label]="'Peso (step 0.25)'" [decimals]="2" [step]="0.25" [min]="'0'" (valueChange)="handleValue('Peso', $event)" />
+      </div>
+      <div class="w-full pt-2 sm:w-72">
+        <db-numberbox [label]="'Solo enteros (decimals 0)'" [decimals]="0" (valueChange)="handleValue('Enteros', $event)" />
+      </div>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Estados: éxito y error'" [desc]="'success y error cambian el borde; el hint solo se muestra si required es true.'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-72">
+        <db-numberbox [label]="'Stock'" [value]="15" [required]="true" [success]="true" [hint]="'Stock suficiente'" />
+      </div>
+      <div class="w-full pt-2 sm:w-72">
+        <db-numberbox [label]="'Descuento'" [value]="80" [required]="true" [error]="true" [hint]="'El descuento no puede superar 50'" />
+      </div>
+    </div>
+  </db-card>
+
+  <db-card [title]="'Deshabilitado'" [desc]="'disabled bloquea la edición, el botón de limpiar y los botones de step.'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-72">
+        <db-numberbox [label]="'No editable'" [value]="10" [disabled]="true" [step]="1" [showClearButton]="true" />
+      </div>
+    </div>
+  </db-card>
+
+  <db-card [title]="'Botón de limpiar e ícono'" [desc]="'showClearButton muestra una X cuando hay valor; icon recibe un nombre de Material Symbols.'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-72">
+        <db-numberbox [label]="'Monto'" [value]="1500" [showClearButton]="true" (valueChange)="handleValue('Monto', $event)" />
+      </div>
+      <div class="w-full pt-2 sm:w-72">
+        <db-numberbox [label]="'Importe'" [icon]="'payments'" [decimals]="2" [placeholder]="'0.00'" (valueChange)="handleValue('Importe', $event)" />
+      </div>
+      <div class="w-full pt-2 sm:w-72">
+        <db-numberbox
+          [label]="'Todo junto'"
+          [icon]="'inventory_2'"
+          [step]="1"
+          [min]="'0'"
+          [max]="'99'"
+          [showClearButton]="true"
+          [value]="3"
+          (valueChange)="handleValue('Todo junto', $event)"
+        />
+      </div>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+</div>

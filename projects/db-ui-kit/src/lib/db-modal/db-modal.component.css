@@ -1,0 +1,67 @@
+/* Animación de entrada/salida — igual que db-alert-modal. La duración debe coincidir con
+   TRANSITION_DURATION_MS en el componente. */
+.modal-backdrop {
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+}
+
+.modal-backdrop.modal-visible {
+  opacity: 1;
+}
+
+.modal-content {
+  opacity: 0;
+  transform: scale(0.96) translateY(-8px);
+  transition:
+    opacity 0.2s ease-out,
+    transform 0.2s ease-out;
+}
+
+/* none (y no scale(1)) a propósito: cualquier transform, aunque sea la identidad, convierte al
+   modal en el contenedor de sus hijos position: fixed (p. ej. el dropdown de db-multi-select),
+   que quedarían desplazados. La transición a none se interpola igual. */
+.modal-content.modal-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-backdrop,
+  .modal-content {
+    transition: none;
+  }
+}
+
+.animated-border {
+  animation: animated-border-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes animated-border-pulse {
+  0%,
+  100% {
+    border-color: var(--color-gray-200, #e4e7ec);
+  }
+  50% {
+    border-color: var(--color-brand-400, #7592ff);
+  }
+}
+
+:host-context(.dark) .animated-border {
+  animation-name: animated-border-pulse-dark;
+}
+
+@keyframes animated-border-pulse-dark {
+  0%,
+  100% {
+    border-color: var(--color-gray-700, #344054);
+  }
+  50% {
+    border-color: var(--color-brand-700, #3538cd);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-border {
+    animation: none;
+  }
+}

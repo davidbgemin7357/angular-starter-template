@@ -1,0 +1,68 @@
+<div
+  class="relative h-full w-full touch-pan-y overflow-hidden rounded-lg bg-gray-100 outline-none select-none dark:bg-gray-800"
+  tabindex="0"
+  (keydown)="onKeyDown($event)"
+  (pointerdown)="onPointerDown($event)"
+  (pointerup)="onPointerUp($event)"
+  (pointercancel)="onPointerCancel()"
+>
+  @if (dataSource.length) {
+    <div
+      #track
+      class="flex h-full cursor-grab transition-transform duration-500 ease-in-out active:cursor-grabbing"
+      [style.transition]="animate ? null : 'none'"
+      [style.transform]="'translateX(-' + trackPosition * 100 + '%)'"
+      (transitionend)="onTrackTransitionEnd($event)"
+    >
+      @for (image of slides; track $index) {
+        <div class="h-full w-full shrink-0">
+          <img
+            [src]="image"
+            [alt]="'Imagen ' + slideNumber($index)"
+            [class]="'h-full w-full ' + objectFitClass"
+            draggable="false"
+            (dragstart)="$event.preventDefault()"
+          />
+        </div>
+      }
+    </div>
+
+    @if (showNavButtons && dataSource.length > 1) {
+      <button
+        type="button"
+        (click)="prev()"
+        [disabled]="isPrevDisabled()"
+        class="db-glass-overlay absolute left-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white transition-colors hover:bg-black/60 disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        <span class="material-symbols-outlined text-[22px]!">chevron_left</span>
+      </button>
+
+      <button
+        type="button"
+        (click)="next()"
+        [disabled]="isNextDisabled()"
+        class="db-glass-overlay absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white transition-colors hover:bg-black/60 disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        <span class="material-symbols-outlined text-[22px]!">chevron_right</span>
+      </button>
+    }
+
+    @if (showIndicator && dataSource.length > 1) {
+      <div class="absolute bottom-3 left-0 flex w-full items-center justify-center gap-2">
+        @for (image of dataSource; track $index) {
+          <button
+            type="button"
+            (click)="goTo($index)"
+            class="h-2.5 w-2.5 rounded-full border border-black/50 shadow-[0_0_2px_rgba(0,0,0,0.8)] transition-colors"
+            [class.bg-white]="$index === currentIndex"
+            [class.bg-white/50]="$index !== currentIndex"
+          ></button>
+        }
+      </div>
+    }
+  } @else {
+    <div class="flex h-full w-full items-center justify-center text-sm text-gray-400">
+      Sin imágenes para mostrar
+    </div>
+  }
+</div>

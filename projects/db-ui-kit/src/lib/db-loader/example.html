@@ -1,0 +1,9 @@
+<!-- Caso 1: loader visible -->
+<db-loader [isVisible]="true"></db-loader>
+
+<!-- Caso 2: loader oculto (no se renderiza) -->
+<db-loader [isVisible]="false"></db-loader>
+
+<!-- Caso 3: controlado desde el componente, útil para mostrar/ocultar durante una carga async -->
+<db-loader [isVisible]="isLoading"></db-loader>
+<db-button (click)="isLoading = !isLoading">Alternar loader</db-button>

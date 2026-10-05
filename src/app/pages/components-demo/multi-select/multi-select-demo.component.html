@@ -1,0 +1,77 @@
+<div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+  <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Multi Select</h1>
+  <p class="mt-2 text-theme-sm text-gray-500 dark:text-gray-400">
+    Lista desplegable de selección múltiple con chips, búsqueda opcional e imágenes por opción.
+    Selector: <code>&lt;db-multi-select&gt;</code>
+  </p>
+</div>
+
+<div class="mt-6 grid gap-6">
+  <db-card [title]="'Básico, label, búsqueda y limpiar'" [desc]="'Variantes principales de selección múltiple.'">
+    <div class="grid gap-4 md:grid-cols-2">
+      <db-multi-select
+        [options]="fruitOptions"
+        (selectionChange)="onBasicSelection($event)"
+      ></db-multi-select>
+
+      <db-multi-select
+        [label]="'Frutas'"
+        [placeholder]="'Selecciona frutas'"
+        [options]="fruitOptions"
+        (valueChange)="onValueChange('Con label', $event)"
+      ></db-multi-select>
+
+      <db-multi-select
+        [label]="'Frutas (con búsqueda)'"
+        [options]="fruitOptions"
+        [allowSearch]="true"
+        [searchPlaceholder]="'Buscar fruta...'"
+        (selectionChange)="onSelectionChange('Búsqueda', $event)"
+      ></db-multi-select>
+
+      <db-multi-select
+        [label]="'Frutas (con botón limpiar)'"
+        [options]="fruitOptions"
+        [showClearButton]="true"
+        (selectionChange)="onSelectionChange('Limpiar', $event)"
+      ></db-multi-select>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Códigos básico: [{{ selectedCodes().join(', ') }}]</p>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Opciones con imagen'" [desc]="'Opciones con url de imagen y tamaño personalizado o por defecto.'">
+    <div class="grid gap-4 md:grid-cols-2">
+      <db-multi-select
+        [label]="'Imágenes'"
+        [options]="imageOptions"
+        [showClearButton]="true"
+        (valueChange)="onValueChange('Imágenes', $event)"
+      ></db-multi-select>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Obligatorio y deshabilitado'" [desc]="'required y disabled.'">
+    <div class="grid gap-4 md:grid-cols-2">
+      <db-multi-select
+        [label]="'Frutas (obligatorio)'"
+        [options]="fruitOptions"
+        [required]="true"
+      ></db-multi-select>
+
+      <db-multi-select
+        [label]="'Frutas (deshabilitado)'"
+        [options]="fruitOptions"
+        [disabled]="true"
+      ></db-multi-select>
+
+      <db-multi-select
+        [label]="'Frutas (deshabilitado con selección)'"
+        [options]="fruitOptions"
+        [ngModel]="disabledSelection"
+        [disabled]="true"
+      ></db-multi-select>
+    </div>
+  </db-card>
+</div>

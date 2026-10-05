@@ -1,0 +1,28 @@
+<db-text-box
+  [type]="'text'"
+  [placeholder]="'Ingresa tu nombre'"
+  [label]="'Nombre'"
+  [required]="true"
+  [minLength]="3"
+  [maxLength]="10"
+  [icon]="'close'"
+></db-text-box>
+
+<db-text-box
+  [type]="'text'"
+  [label]="'Apellido'"
+  [regexp]="'[a-zA-ZáéíóúÁÉÍÓÚñÑ ]'"
+  [required]="true"
+  [icon]="'favorite'"
+  [showClearButton]="true"
+></db-text-box>
+
+
+<db-text-box
+  [type]="'password'"
+  [label]="'Contraseña'"
+  [required]="true"
+  [showClearButton]="true"
+  [icon]="'edit'"
+  [placeholder]="'Ingresa tu contraseña'"
+></db-text-box>

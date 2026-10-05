@@ -1,0 +1,73 @@
+<label
+  class="flex items-center gap-3 group"
+  [ngClass]="{ 'cursor-not-allowed opacity-60': disabled }"
+>
+  <div
+    class="relative flex items-center justify-center w-5 h-5 shrink-0 self-center rounded-md border transition-colors"
+    [ngClass]="{
+      'bg-brand-500 border-transparent': checked && !disabled,
+      'border-gray-300 dark:border-gray-700': !checked && !disabled,
+      'bg-gray-400 border-transparent dark:bg-gray-600': checked && disabled,
+      'bg-gray-100 border-gray-300 dark:bg-gray-800 dark:border-gray-700': !checked && disabled,
+    }"
+  >
+
+    <input
+      [id]="id"
+      type="checkbox"
+      class="absolute inset-0 w-full h-full opacity-0"
+      [ngClass]="disabled ? 'cursor-not-allowed' : 'cursor-pointer'"
+      [checked]="checked"
+      (change)="onChange($event)"
+      [disabled]="disabled"
+    />
+
+    <!-- Check blanco tanto sobre brand (habilitado) como sobre gris (deshabilitado) -->
+    @if (checked) {
+      <svg
+        class="relative z-10 pointer-events-none"
+        xmlns="http://www.w3.org/2000/svg"
+        width="14"
+        height="14"
+        viewBox="0 0 14 14"
+        fill="none"
+      >
+        <path
+          d="M11.6666 3.5L5.24992 9.91667L2.33325 7"
+          stroke="white"
+          stroke-width="1.94437"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    }
+  </div>
+
+  @if (label) {
+    <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
+      {{ label }}
+    </span>
+  }
+
+  @if (text) {
+    <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
+      {{ text }}
+    </span>
+  }
+
+  @if (picture) {
+    <img
+      [src]="picture.url"
+      [style.width.px]="pictureWidth"
+      [style.height.px]="pictureHeight"
+      class="rounded-md object-cover"
+      alt=""
+    />
+  }
+
+  @if (htmlContent) {
+    <!-- Sin bypassSecurityTrustHtml a propósito: Angular sanea el HTML (quita scripts y
+         atributos on*), porque htmlContent puede venir de BD o de un CMS. -->
+    <span [innerHTML]="htmlContent"></span>
+  }
+</label>

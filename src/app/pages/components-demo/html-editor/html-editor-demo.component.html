@@ -1,0 +1,115 @@
+<div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+  <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">HTML Editor</h1>
+  <p class="mt-2 text-theme-sm text-gray-500 dark:text-gray-400">
+    Editor de texto enriquecido similar a dxHtmlEditor: formato de texto, encabezados, fuentes,
+    colores, listas, citas, código, enlaces, imágenes (URL, archivo, pegar o arrastrar) y tablas con
+    edición de filas y columnas. Respeta el tema claro/oscuro e implementa ControlValueAccessor.
+    Selector: <code>&lt;db-html-editor&gt;</code>.
+  </p>
+</div>
+
+<div class="mt-6 grid gap-6">
+  <db-card
+    [title]="'Editor completo'"
+    [desc]="'Todas las opciones de la barra habilitadas (DB_HTML_EDITOR_FULL_TOOLBAR). Selecciona una celda para activar las acciones de tabla y haz clic en una imagen para redimensionarla.'"
+  >
+    <div class="pt-2">
+      <db-html-editor
+        [label]="'Contenido'"
+        [toolbar]="fullToolbar"
+        [height]="'460px'"
+        [ngModel]="fullHtml()"
+        (ngModelChange)="handleFullChange($event)"
+        (focusIn)="handleFocus('focusIn', $event)"
+        (focusOut)="handleFocus('focusOut', $event)"
+      />
+    </div>
+
+    <div class="flex flex-wrap items-center gap-3">
+      <db-button [size]="'sm'" [type]="'outline'" (btnClick)="resetFull()">Restaurar contenido</db-button>
+      <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+    </div>
+
+    <div class="rounded-xl border border-gray-200 dark:border-gray-800">
+      <div class="flex items-center gap-1 border-b border-gray-200 p-1.5 dark:border-gray-800">
+        <button
+          type="button"
+          class="rounded-md px-3 py-1 text-xs font-medium transition-colors"
+          [class]="previewMode() === 'render'
+            ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-400'
+            : 'text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5'"
+          (click)="previewMode.set('render')"
+        >Vista previa</button>
+        <button
+          type="button"
+          class="rounded-md px-3 py-1 text-xs font-medium transition-colors"
+          [class]="previewMode() === 'html'
+            ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-400'
+            : 'text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5'"
+          (click)="previewMode.set('html')"
+        >HTML generado</button>
+      </div>
+      @if (previewMode() === 'render') {
+        <div class="html-preview max-h-80 overflow-auto p-4 text-sm text-gray-800 dark:text-white/90" [innerHTML]="previewHtml()"></div>
+      } @else {
+        <pre class="max-h-80 overflow-auto whitespace-pre-wrap break-all p-4 text-xs text-gray-700 dark:text-gray-300">{{ fullHtml() }}</pre>
+      }
+    </div>
+  </db-card>
+
+  <db-card [title]="'Formulario reactivo'" [desc]="'formControlName con Validators.required: el editor vacío emite cadena vacía, así que la validación funciona igual que en un input.'">
+    <form class="space-y-4 pt-2" [formGroup]="form" (ngSubmit)="submit()">
+      <db-html-editor
+        formControlName="descripcion"
+        [label]="'Descripción'"
+        [required]="true"
+        [height]="'200px'"
+        [placeholder]="'Describe el requerimiento...'"
+        [error]="descripcionError"
+        [hint]="descripcionError ? 'La descripción es obligatoria' : 'Puedes pegar imágenes o arrastrarlas al editor'"
+      />
+      <div class="flex flex-wrap items-center gap-3">
+        <db-button [size]="'sm'" (btnClick)="submit()">Enviar</db-button>
+        <span class="text-theme-sm text-gray-500 dark:text-gray-400">
+          Estado: {{ form.controls.descripcion.valid ? 'válido' : 'inválido' }}
+        </span>
+      </div>
+    </form>
+  </db-card>
+
+  <db-card [title]="'Barra personalizada'" [desc]="'toolbar recibe los elementos en orden; toolbarMultiline=false deja la barra en una sola línea con scroll horizontal.'">
+    <div class="grid gap-4 pt-2 lg:grid-cols-2">
+      <db-html-editor
+        [label]="'Formato básico'"
+        [toolbar]="basicToolbar"
+        [height]="'160px'"
+        [(ngModel)]="basicHtml"
+      />
+      <db-html-editor
+        [label]="'Una sola línea'"
+        [toolbar]="fullToolbar"
+        [toolbarMultiline]="false"
+        [height]="'160px'"
+      />
+    </div>
+  </db-card>
+
+  <db-card [title]="'Límite de caracteres'" [desc]="'maxLength recorta el texto que se pase del límite y muestra un contador debajo del editor.'">
+    <div class="pt-2">
+      <db-html-editor
+        [label]="'Resumen'"
+        [toolbar]="basicToolbar"
+        [maxLength]="maxLength"
+        [height]="'140px'"
+        [placeholder]="'Máximo ' + maxLength + ' caracteres'"
+      />
+    </div>
+  </db-card>
+
+  <db-card [title]="'Estados'" [desc]="'readOnly permite seleccionar y copiar sin editar; disabled bloquea el editor y lo atenúa. En ambos casos la barra queda deshabilitada.'">
+    <div class="grid gap-4 pt-2 lg:grid-cols-2">
+      <db-html-editor [label]="'Solo lectura'" [readOnly]="true" [height]="'140px'" [(ngModel)]="readOnlyHtml" />
+      <db-html-editor [label]="'Deshabilitado'" [disabled]="true" [height]="'140px'" [(ngModel)]="disabledHtml" />
+    </div>
+  </db-card>
+</div>

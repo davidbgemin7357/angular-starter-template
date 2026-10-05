@@ -1,0 +1,54 @@
+<db-loader [isVisible]="isLoading()"></db-loader>
+
+<div class="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
+  <div class="mb-5 sm:mb-8">
+    <h1
+      class="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md"
+    >
+      Iniciar Sesión
+    </h1>
+    <p class="text-sm text-gray-500 dark:text-gray-400">
+      Ingresa tu código y contraseña para continuar.
+    </p>
+  </div>
+
+  <form [formGroup]="loginForm" class="flex flex-col justify-center w-full gap-4" (ngSubmit)="submit()">
+    <db-text-box
+      [type]="'text'"
+      [placeholder]="'Ingresa tu código'"
+      [maxLength]="maxLength"
+      [value]="codigoControl.value"
+      [error]="!!codigoError"
+      [required]="true"
+      [hint]="codigoError"
+      [minLength]="minLength"
+      (valueChange)="handleCodigo($event)"
+      (keydown.enter)="onEnter($event)"
+    ></db-text-box>
+
+    <db-text-box
+      [type]="'password'"
+      [placeholder]="'Ingresa tu contraseña'"
+      [regexp]="'[0-9]'"
+      [value]="passwordControl.value"
+      [error]="!!passwordError"
+      [required]="true"
+      [hint]="passwordError"
+      (valueChange)="handlePassword($event)"
+      (keydown.enter)="onEnter($event)"
+    ></db-text-box>
+
+    <db-button className="w-full mt-2" size="sm" [disabled]="disabledSubmit" (btnClick)="submit()">
+      Ingresar
+    </db-button>
+  </form>
+</div>
+
+<db-alert-modal
+  mode="danger"
+  title="No se pudo iniciar sesión"
+  [message]="errorMessage()"
+  [isOpen]="showErrorModal()"
+  (close)="closeErrorModal()"
+  (accept)="closeErrorModal()"
+></db-alert-modal>

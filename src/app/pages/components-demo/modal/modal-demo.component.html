@@ -1,0 +1,110 @@
+<div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+  <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Modal</h1>
+  <p class="mt-2 text-theme-sm text-gray-500 dark:text-gray-400">
+    Ventana modal genérica con contenido proyectado, título opcional, modo pantalla completa y control del
+    cierre por botón, click fuera o tecla Escape. Selector: <code>&lt;db-modal&gt;</code>.
+  </p>
+</div>
+
+<div class="mt-6 grid gap-6">
+  <db-card
+    [title]="'Modal normal'"
+    [desc]="'Con title muestra cabecera con botón de cierre. El contenido se proyecta con ng-content y className define el ancho (por ejemplo max-w-lg).'"
+  >
+    <div class="flex flex-wrap items-center gap-3">
+      <db-button [startIcon]="'open_in_new'" (btnClick)="open('normal')">Abrir modal</db-button>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card
+    [title]="'Pantalla completa'"
+    [desc]="'isFullscreen ocupa toda la ventana y no tiene backdrop, así que el click fuera no aplica. El fondo se da con className.'"
+  >
+    <div class="flex flex-wrap items-center gap-3">
+      <db-button [startIcon]="'fullscreen'" (btnClick)="open('fullscreen')">Abrir en pantalla completa</db-button>
+    </div>
+  </db-card>
+
+  <db-card
+    [title]="'Sin botón de cierre'"
+    [desc]="'showCloseButton en false oculta la X; el modal se cierra con click fuera, Escape o una acción del propio contenido.'"
+  >
+    <div class="flex flex-wrap items-center gap-3">
+      <db-button [type]="'outline'" (btnClick)="open('sinCerrar')">Abrir sin botón de cierre</db-button>
+    </div>
+  </db-card>
+
+  <db-card
+    [title]="'Sin cierre al hacer click fuera'"
+    [desc]="'hideOnOutsideClick en false ignora el click en el fondo y la tecla Escape; solo cierra la X o una acción del contenido.'"
+  >
+    <div class="flex flex-wrap items-center gap-3">
+      <db-button [variant]="'warning'" (btnClick)="open('sinClickFuera')">Abrir modal persistente</db-button>
+    </div>
+  </db-card>
+</div>
+
+<db-modal
+  [isOpen]="openModal() === 'normal'"
+  [title]="'Detalle del pedido'"
+  [className]="'max-w-lg'"
+  (close)="handleClose('normal', 'close')"
+>
+  <div class="space-y-3 p-5 text-theme-sm text-gray-600 dark:text-gray-300">
+    <p>Este contenido se proyecta dentro del modal con <code>ng-content</code>.</p>
+    <ul class="list-disc space-y-1 pl-5">
+      <li>Cliente: Juan Pérez</li>
+      <li>Monto: S/ 1,500.25</li>
+      <li>Estado: Aprobado</li>
+    </ul>
+    <div class="flex justify-end gap-3 pt-2">
+      <db-button [size]="'sm'" [type]="'outline'" (btnClick)="handleClose('normal', 'Cancelar')">Cancelar</db-button>
+      <db-button [size]="'sm'" [startIcon]="'check'" (btnClick)="handleClose('normal', 'Guardar')">Guardar</db-button>
+    </div>
+  </div>
+</db-modal>
+
+<db-modal
+  [isOpen]="openModal() === 'fullscreen'"
+  [isFullscreen]="true"
+  [title]="'Vista en pantalla completa'"
+  [className]="'bg-white dark:bg-gray-900'"
+  (close)="handleClose('fullscreen', 'close')"
+>
+  <div class="flex flex-1 flex-col items-center justify-center gap-4 p-6 text-center">
+    <p class="text-theme-sm text-gray-600 dark:text-gray-300">
+      El modal ocupa todo el viewport. Cierra con la X de la cabecera, Escape o el botón de abajo.
+    </p>
+    <db-button [startIcon]="'fullscreen_exit'" (btnClick)="handleClose('fullscreen', 'Salir')">Salir</db-button>
+  </div>
+</db-modal>
+
+<db-modal
+  [isOpen]="openModal() === 'sinCerrar'"
+  [showCloseButton]="false"
+  [className]="'max-w-md'"
+  (close)="handleClose('sinCerrar', 'close')"
+>
+  <div class="space-y-4 p-6 text-center">
+    <p class="text-theme-sm text-gray-600 dark:text-gray-300">No hay X. Haz click fuera, pulsa Escape o usa el botón.</p>
+    <db-button [size]="'sm'" (btnClick)="handleClose('sinCerrar', 'Entendido')">Entendido</db-button>
+  </div>
+</db-modal>
+
+<db-modal
+  [isOpen]="openModal() === 'sinClickFuera'"
+  [hideOnOutsideClick]="false"
+  [title]="'Acción requerida'"
+  [className]="'max-w-md'"
+  (close)="handleClose('sinClickFuera', 'close')"
+>
+  <div class="space-y-4 p-5 text-theme-sm text-gray-600 dark:text-gray-300">
+    <p>Hacer click en el fondo o pulsar Escape no cierra este modal.</p>
+    <div class="flex justify-end">
+      <db-button [size]="'sm'" [variant]="'success'" (btnClick)="handleClose('sinClickFuera', 'Continuar')">
+        Continuar
+      </db-button>
+    </div>
+  </div>
+</db-modal>

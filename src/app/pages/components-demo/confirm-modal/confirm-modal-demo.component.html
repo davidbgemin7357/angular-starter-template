@@ -1,0 +1,38 @@
+<div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+  <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Confirm Modal</h1>
+  <p class="mt-2 text-theme-sm text-gray-500 dark:text-gray-400">
+    Modal de confirmación con botones Confirmar y Cancelar. Se usa en la plantilla o de forma imperativa con
+    <code>DbConfirmModalService.confirm()</code>. Selector: <code>&lt;db-confirm-modal&gt;</code>.
+  </p>
+</div>
+
+<div class="mt-6 grid gap-6">
+  <db-card
+    [title]="'Uso como componente'"
+    [desc]="'confirm emite true (Confirmar) o false (Cancelar). La X, el click fuera y Escape emiten close; el padre debe volver isOpen a false.'"
+  >
+    <div class="flex flex-wrap items-center gap-3">
+      <db-button [variant]="'error'" [startIcon]="'delete'" (btnClick)="isOpen.set(true)">Eliminar registro</db-button>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card
+    [title]="'Uso con DbConfirmModalService'"
+    [desc]="'confirm(message, options) crea el modal en un overlay y resuelve una promesa booleana: true al confirmar, false al cancelar o cerrar. Opciones: title, hideOnOutsideClick, showCloseButton, className.'"
+  >
+    <div class="flex flex-wrap items-center gap-3">
+      <db-button (btnClick)="confirmSimple()">confirm() simple</db-button>
+      <db-button [type]="'outline'" (btnClick)="confirmWithOptions()">confirm() con título y sin cierre externo</db-button>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ serviceResult() }}</p>
+  </db-card>
+</div>
+
+<db-confirm-modal
+  [isOpen]="isOpen()"
+  [title]="'Eliminar registro'"
+  [message]="'Esta acción no se puede deshacer. ¿Deseas continuar?'"
+  (confirm)="handleConfirm($event)"
+  (close)="handleClose()"
+></db-confirm-modal>

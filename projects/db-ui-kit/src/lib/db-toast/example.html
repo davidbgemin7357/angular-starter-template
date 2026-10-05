@@ -1,0 +1,15 @@
+
+  <button
+    type="button"
+    (click)="toastRef.show()"
+    class="w-fit rounded-md bg-brand-500 px-4 py-2 text-sm font-medium text-white"
+  >
+    Mostrar Toast
+  </button>
+
+  <db-toast
+    #toastRef
+    [variant]="'primary'"
+    [message]="'Operación realizada con fracaso'"
+    [time]="5000"
+  ></db-toast>

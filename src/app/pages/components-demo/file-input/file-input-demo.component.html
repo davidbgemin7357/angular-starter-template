@@ -1,0 +1,80 @@
+<div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+  <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">File Input</h1>
+  <p class="mt-2 text-theme-sm text-gray-500 dark:text-gray-400">
+    Selector de archivos con validación de extensión, tipo MIME, tamaño y cantidad.
+    Selector: <code>&lt;db-file-input&gt;</code>
+  </p>
+</div>
+
+<div class="mt-6 grid gap-6">
+  <db-card [title]="'Simple y validaciones'" [desc]="'Sin restricciones, allowedExtensions (.jpg/.jpeg/.png) y maxSizeMB (1 MB).'">
+    <div class="grid gap-4 md:grid-cols-2">
+      <db-file-input
+        [showClearButton]="true"
+        (valueChange)="onValueChange('Simple', $event)"
+      ></db-file-input>
+
+      <db-file-input
+        [allowedExtensions]="imageExtensions"
+        [showClearButton]="true"
+        (valueChange)="onValueChange('Extensiones', $event)"
+      ></db-file-input>
+
+      <db-file-input
+        [maxSizeMB]="1"
+        [showClearButton]="true"
+        (valueChange)="onValueChange('Máx. 1 MB', $event)"
+      ></db-file-input>
+    </div>
+  </db-card>
+
+  <db-card [title]="'Múltiple'" [desc]="'multiple con minFiles = 2 y maxFiles = 4 (imágenes de máx. 2 MB).'">
+    <div class="grid gap-4 md:grid-cols-2">
+      <db-file-input
+        [multiple]="true"
+        [minFiles]="2"
+        [maxFiles]="4"
+        [maxSizeMB]="2"
+        [allowedExtensions]="imageExtensions"
+        [showClearButton]="true"
+        (valueChange)="onValueChange('Múltiple', $event)"
+      ></db-file-input>
+    </div>
+  </db-card>
+
+  <db-card [title]="'Estados'" [desc]="'externalErrorMessage, required y disabled.'">
+    <div class="grid gap-4 md:grid-cols-2">
+      <db-file-input
+        [externalErrorMessage]="externalError"
+        (valueChange)="onValueChange('Error externo', $event)"
+      ></db-file-input>
+
+      <db-file-input
+        [required]="true"
+        [showClearButton]="true"
+        (valueChange)="onValueChange('Obligatorio', $event)"
+      ></db-file-input>
+
+      <db-file-input [disabled]="true"></db-file-input>
+    </div>
+  </db-card>
+
+  <db-card [title]="'Resultado'" [desc]="'Último valor emitido por valueChange en cualquiera de los ejemplos.'">
+    <div class="text-theme-sm text-gray-500 dark:text-gray-400">
+      <p>Archivos seleccionados:</p>
+      @if (selectedNames().length) {
+        <ul class="mt-1 list-disc pl-5">
+          @for (name of selectedNames(); track name) {
+            <li>{{ name }}</li>
+          }
+        </ul>
+      } @else {
+        <p class="mt-1">Ninguno</p>
+      }
+      @if (lastError()) {
+        <p class="mt-2 text-error-500">Error: {{ lastError() }}</p>
+      }
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+</div>

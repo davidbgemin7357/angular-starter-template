@@ -1,0 +1,25 @@
+<span class="db-glass-gloss select-none" [ngClass]="baseStyles + ' ' + sizeClass + ' ' + colorStyles">
+  @if (startIcon) {
+    <span
+      class="material-symbols-outlined"
+      [style.font-size.px]="iconFontSize"
+      (click)="onStartIconClick($event)"
+    >
+      {{ startIcon }}
+    </span>
+  }
+
+  <span (click)="onContentClick()">
+    <ng-content></ng-content>
+  </span>
+
+  @if (endIcon) {
+    <span
+      class="material-symbols-outlined"
+      [style.font-size.px]="iconFontSize"
+      (click)="onEndIconClick($event)"
+    >
+      {{ endIcon }}
+    </span>
+  }
+</span>

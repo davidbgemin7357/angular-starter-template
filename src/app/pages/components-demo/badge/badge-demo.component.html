@@ -1,0 +1,71 @@
+<div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+  <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Badge</h1>
+  <p class="mt-2 text-theme-sm text-gray-500 dark:text-gray-400">
+    Etiqueta compacta para estados o categorías, con variante clara o sólida, siete colores, dos
+    tamaños e íconos clicables. Selector: <code>&lt;db-badge&gt;</code>.
+  </p>
+</div>
+
+<div class="mt-6 grid gap-6">
+  @for (variant of variants; track variant) {
+    <db-card [title]="'Variante ' + variant" [desc]="'variant: ' + variant + ' con cada valor de color.'">
+      <div class="flex flex-wrap items-center gap-3">
+        @for (color of colors; track color) {
+          <db-badge [variant]="variant" [color]="color">{{ color }}</db-badge>
+        }
+      </div>
+    </db-card>
+  }
+
+  <db-card [title]="'Tamaños'" [desc]="'size: sm | md (por defecto md). En sm el ícono se reduce a 16px.'">
+    @for (size of sizes; track size) {
+      <div class="flex flex-wrap items-center gap-3">
+        <db-badge [size]="size" [color]="'primary'">Tamaño {{ size }}</db-badge>
+        <db-badge [size]="size" [variant]="'solid'" [color]="'success'" [startIcon]="'check_circle'">Aprobado</db-badge>
+        <db-badge [size]="size" [color]="'error'" [endIcon]="'close'">Rechazado</db-badge>
+      </div>
+    }
+  </db-card>
+
+  <db-card [title]="'Íconos y eventos'" [desc]="'startIcon / endIcon reciben un nombre de Material Symbols. iconClick emite start | end; contentClick se dispara al hacer clic en el texto.'">
+    <div class="flex flex-wrap items-center gap-3">
+      <db-badge
+        [color]="'success'"
+        [startIcon]="'check_circle'"
+        (iconClick)="handleIconClick('Aprobado', $event)"
+        (contentClick)="handleContentClick('Aprobado')"
+      >
+        Aprobado
+      </db-badge>
+      <db-badge
+        [color]="'warning'"
+        [startIcon]="'schedule'"
+        [endIcon]="'close'"
+        (iconClick)="handleIconClick('Pendiente', $event)"
+        (contentClick)="handleContentClick('Pendiente')"
+      >
+        Pendiente
+      </db-badge>
+      <db-badge
+        [variant]="'solid'"
+        [color]="'info'"
+        [endIcon]="'close'"
+        (iconClick)="handleIconClick('Filtro: Activos', $event)"
+        (contentClick)="handleContentClick('Filtro: Activos')"
+      >
+        Filtro: Activos
+      </db-badge>
+      <db-badge
+        [variant]="'solid'"
+        [color]="'dark'"
+        [size]="'sm'"
+        [startIcon]="'label'"
+        (iconClick)="handleIconClick('Etiqueta', $event)"
+        (contentClick)="handleContentClick('Etiqueta')"
+      >
+        Etiqueta
+      </db-badge>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+</div>

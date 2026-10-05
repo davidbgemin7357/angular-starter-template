@@ -1,0 +1,45 @@
+<div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+  <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Toast</h1>
+  <p class="mt-2 text-theme-sm text-gray-500 dark:text-gray-400">
+    Notificación breve que aparece en la parte inferior de la pantalla y se oculta sola. Se lanza con
+    <code>DbToastService.open()</code> o se declara en la plantilla. Selector: <code>&lt;db-toast&gt;</code>.
+  </p>
+</div>
+
+<div class="mt-6 grid gap-6">
+  <db-card
+    [title]="'Variantes con DbToastService'"
+    [desc]="'open(variant, message, duration = 4000). variant: success | error | warning | primary | info. Crea el toast en un overlay y lo destruye al ocultarse.'"
+  >
+    <div class="flex flex-wrap items-center gap-3">
+      @for (example of examples; track example.variant) {
+        <db-button [variant]="example.buttonVariant" (btnClick)="openToast(example)">{{ example.label }}</db-button>
+      }
+      <db-button [type]="'outline'" [startIcon]="'timer'" (btnClick)="openShortToast()">Duración 1500 ms</db-button>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card
+    [title]="'Componente db-toast'"
+    [desc]="'Declarado en la plantilla con time de 6000 ms y visible controlado por un signal. Se oculta solo al cumplirse time y emite closed; también se puede ocultar antes poniendo visible en false.'"
+  >
+    <div class="flex flex-wrap items-center gap-3">
+      <db-button [startIcon]="toastVisible() ? 'visibility_off' : 'visibility'" (btnClick)="toggleToast()">
+        {{ toastVisible() ? 'Ocultar toast' : 'Mostrar toast' }}
+      </db-button>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">
+      Último evento: {{ lastEvent() }} — visible: {{ toastVisible() }}
+    </p>
+  </db-card>
+</div>
+
+<!-- time va antes que visible: el setter de visible arranca el temporizador con el time vigente. -->
+<db-toast
+  [variant]="'success'"
+  [message]="'Toast declarado en la plantilla (6 s).'"
+  [time]="customTime"
+  [visible]="toastVisible()"
+  (closed)="handleClosed()"
+></db-toast>

@@ -1,0 +1,43 @@
+<div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+  <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Card</h1>
+  <p class="mt-2 text-theme-sm text-gray-500 dark:text-gray-400">
+    Contenedor con cabecera (título, descripción opcional y acciones) y cuerpo proyectado.
+    Selector: <code>&lt;db-card&gt;</code> (clase <code>DbComponentCardComponent</code>).
+  </p>
+</div>
+
+<div class="mt-6 grid gap-6">
+  <db-card [title]="'Solo título'">
+    <p class="text-theme-sm text-gray-700 dark:text-gray-300">
+      Sin <code>desc</code> la cabecera muestra únicamente el título.
+    </p>
+  </db-card>
+
+  <db-card [title]="'Con descripción'" [desc]="'La descripción aparece debajo del título, en gris.'">
+    <p class="text-theme-sm text-gray-700 dark:text-gray-300">
+      El contenido por defecto (<code>ng-content</code>) va en el cuerpo, separado por un borde superior.
+    </p>
+  </db-card>
+
+  <db-card [title]="'Con acciones'" [desc]="'Los elementos con el atributo cardActions se proyectan a la derecha de la cabecera.'">
+    <div cardActions class="flex items-center gap-2">
+      <db-badge [color]="'success'" [size]="'sm'">Activo</db-badge>
+      <db-button [size]="'sm'" [type]="'outline'" [startIcon]="'edit'" (btnClick)="handleAction('Editar')">Editar</db-button>
+      <db-button [size]="'sm'" [startIcon]="'add'" (btnClick)="handleAction('Nuevo')">Nuevo</db-button>
+    </div>
+    <div class="flex flex-wrap items-center gap-3">
+      <p class="text-theme-sm text-gray-700 dark:text-gray-300">Cuerpo de la card con acciones en la cabecera.</p>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card
+    [title]="'Con className'"
+    [desc]="'className agrega clases al contenedor raíz (aquí sombra y borde de marca).'"
+    [className]="'shadow-theme-lg !border-brand-300 dark:!border-brand-800'"
+  >
+    <p class="text-theme-sm text-gray-700 dark:text-gray-300">
+      Útil para ajustar bordes, sombras o márgenes sin envolver la card en otro elemento.
+    </p>
+  </db-card>
+</div>

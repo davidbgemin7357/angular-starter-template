@@ -1,0 +1,116 @@
+<div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+  <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Select Box</h1>
+  <p class="mt-2 text-theme-sm text-gray-500 dark:text-gray-400">
+    Lista desplegable de selección única con búsqueda opcional, colores por opción y estados de validación.
+    Selector: <code>&lt;db-select-box&gt;</code>
+  </p>
+</div>
+
+<div class="mt-6 grid gap-6">
+  <db-card [title]="'Básico y con label'" [desc]="'Sin label, con label y con búsqueda (allowSearch).'">
+    <div class="grid gap-4 md:grid-cols-2">
+      <db-select-box
+        [id]="'sb-basic'"
+        [options]="countryOptions"
+        [value]="basicValue()"
+        (valueChange)="onBasicChange($event)"
+        (optionSelected)="onOptionSelected('Básico', $event)"
+      ></db-select-box>
+
+      <db-select-box
+        [id]="'sb-label'"
+        [label]="'País'"
+        [placeholder]="'Selecciona un país'"
+        [options]="countryOptions"
+        (valueChange)="onValueChange('Con label', $event)"
+      ></db-select-box>
+
+      <db-select-box
+        [id]="'sb-search'"
+        [label]="'País (con búsqueda)'"
+        [options]="countryOptions"
+        [allowSearch]="true"
+        [searchPlaceholder]="'Buscar país...'"
+        (valueChange)="onValueChange('Búsqueda', $event)"
+      ></db-select-box>
+
+      <db-select-box
+        [id]="'sb-clear'"
+        [label]="'País (con botón limpiar)'"
+        [options]="countryOptions"
+        [showClearButton]="true"
+        [defaultValue]="'CO'"
+        (valueChange)="onValueChange('Limpiar', $event)"
+      ></db-select-box>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Valor básico: "{{ basicValue() }}"</p>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card
+    [title]="'Opciones con color e icono'"
+    [desc]="'Opciones con color (success/warning/danger), icono Material Symbols y una opción inactiva.'"
+  >
+    <div class="grid gap-4 md:grid-cols-2">
+      <db-select-box
+        [id]="'sb-color'"
+        [label]="'Estado'"
+        [options]="statusOptions"
+        [showClearButton]="true"
+        [value]="colorValue()"
+        (valueChange)="onColorChange($event)"
+      ></db-select-box>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Valor: "{{ colorValue() }}"</p>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Estados de validación'" [desc]="'success, error con hint y required en false.'">
+    <div class="grid gap-4 md:grid-cols-2">
+      <db-select-box
+        [id]="'sb-success'"
+        [label]="'País (success)'"
+        [options]="countryOptions"
+        [defaultValue]="'PE'"
+        [success]="true"
+        [hint]="'Selección válida'"
+      ></db-select-box>
+
+      <db-select-box
+        [id]="'sb-error'"
+        [label]="'País (error)'"
+        [options]="countryOptions"
+        [error]="true"
+        [hint]="'Este campo es obligatorio'"
+      ></db-select-box>
+
+      <db-select-box
+        [id]="'sb-optional'"
+        [label]="'País (opcional)'"
+        [options]="countryOptions"
+        [required]="false"
+      ></db-select-box>
+    </div>
+  </db-card>
+
+  <db-card [title]="'Deshabilitado y valor por defecto'" [desc]="'disabled y defaultValue.'">
+    <div class="grid gap-4 md:grid-cols-2">
+      <db-select-box
+        [id]="'sb-disabled'"
+        [label]="'País (deshabilitado)'"
+        [options]="countryOptions"
+        [defaultValue]="'MX'"
+        [disabled]="true"
+      ></db-select-box>
+
+      <db-select-box
+        [id]="'sb-default'"
+        [label]="'País (defaultValue = CL)'"
+        [options]="countryOptions"
+        [defaultValue]="'CL'"
+        [allowEmptyOptionSelect]="false"
+        (valueChange)="onValueChange('Default', $event)"
+      ></db-select-box>
+    </div>
+  </db-card>
+</div>

@@ -1,0 +1,104 @@
+<div class="w-full">
+  <div class="relative">
+    @if (label) {
+      <label [for]="id" class="db-glass-label absolute left-4 top-0 z-20 -translate-y-1/2 bg-white px-1 text-xs font-medium text-gray-600 dark:bg-gray-900 dark:text-gray-200 select-none">
+        {{ label }}
+        @if (required) {
+          <span class="ml-1 text-red-500">*</span>
+        }
+      </label>
+    }
+
+    <div class="relative">
+      @if (icon) {
+        <span
+          class="pointer-events-none absolute left-0 top-1/2 z-10 flex h-11 w-11.5 -translate-y-1/2 items-center justify-center border-r border-gray-200 text-gray-500 dark:border-gray-800 dark:text-gray-400"
+        >
+          <span class="material-symbols-outlined text-lg">{{ icon }}</span>
+        </span>
+      }
+
+      <input
+        class="db-glass-control"
+        #inputRef
+        type="text"
+        [attr.inputmode]="inputMode"
+        [id]="id"
+        [name]="name"
+        [placeholder]="placeholder"
+        [min]="min"
+        [max]="max"
+        [step]="step"
+        [disabled]="disabled"
+        [ngClass]="inputClasses"
+        (input)="onInput($event)"
+        (blur)="onBlur($event)"
+        (keydown)="onKeyDown($event)"
+        [style.padding-right.rem]="inputPaddingRight"
+        [style.padding-left.rem]="inputPaddingLeft"
+      />
+
+      @if (showClearButton && hasValue) {
+        <button
+          type="button"
+          tabindex="-1"
+          class="clear-button"
+          [style.right.rem]="clearButtonRightOffset"
+          [disabled]="disabled"
+          (click)="clearValue()"
+          aria-label="Limpiar contenido"
+          title="Limpiar contenido"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6l12 12" />
+            <path d="M18 6L6 18" />
+          </svg>
+        </button>
+      }
+
+      @if (step) {
+        <div class="spinner-buttons">
+          <button
+            type="button"
+            class="spinner-btn"
+            [disabled]="disabled"
+            (click)="incrementValue()"
+            aria-label="Incrementar"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 15l6-6 6 6" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            class="spinner-btn"
+            [disabled]="disabled"
+            (click)="decrementValue()"
+            aria-label="Decrementar"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </button>
+        </div>
+      }
+    </div>
+
+    @if (required) {
+      <div class="min-h-6">
+        @if (hint) {
+          <p
+            class="mt-1.5 text-xs absolute"
+            [ngClass]="{
+              'text-error-500': error,
+              'text-success-500': success,
+              'text-gray-500': !error && !success,
+            }"
+          >
+            {{ hint }}
+          </p>
+        }
+      </div>
+    }
+  </div>
+</div>

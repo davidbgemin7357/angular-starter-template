@@ -1,0 +1,245 @@
+  <!-- ================= EJEMPLO 1: con toolbar, selección múltiple y sub-acciones ================= -->
+  <div>
+    <h3 class="text-lg font-semibold mb-2">DbDataTableComponent - Ejemplo 1 (completo)</h3>
+    <div class="h-100">
+      <db-data-table
+        [data]="tableOneData"
+        [columns]="tableOneColumns"
+        [actions]="tableOneActions"
+        [selectMultiple]="true"
+        [selectableRows]="tableOneSelectableRows"
+        [showToolbar]="true"
+        [totalRows]="tableOneTotalRows"
+        [totalPages]="tableOneTotalPages"
+        [rowsPerPage]="tableOneRowsPerPage"
+        [noDataMessage]="'No hay resultados en esta tabla'"
+        [reorderableColumns]="true"
+        [summary]="tableOneSummary"
+        (currentPageEmit)="onTableOnePage($event)"
+        (emitAction)="onTableOneAction($event)"
+      ></db-data-table>
+    </div>
+  </div>
+
+
+
+    <!-- ================= EJEMPLO 2: sin toolbar, sin selección, menú de acciones colapsado ================= -->
+  <div>
+    <h3 class="text-lg font-semibold mb-2">DbDataTableComponent - Ejemplo 2 (simple)</h3>
+    <div class="h-100">
+      <db-data-table
+        [data]="tableTwoData"
+        [columns]="tableTwoColumns"
+        [actions]="tableTwoActions"
+        [selectMultiple]="false"
+        [selectableRows]="null"
+        [showToolbar]="false"
+        [totalRows]="tableTwoTotalRows"
+        [zebraRows]="true"
+        [totalPages]="tableTwoTotalPages"
+        [rowsPerPage]="tableTwoRowsPerPage"
+        (currentPageEmit)="onTableTwoPage($event)"
+        (emitAction)="onTableTwoAction($event)"
+      ></db-data-table>
+    </div>
+  </div>
+
+
+
+  <!-- 
+    public tableOneData: any[] = [
+    {
+      id: 1,
+      nombre: 'Juan Pérez',
+      curso: 'Discipulado Nivel 1',
+      fechaInscripcion: '2026-05-02',
+      monto: 1500.256,
+      status: { code: 'A', description: 'Activo', color: 'green' },
+    },
+    {
+      id: 2,
+      nombre: 'María Gómez',
+      curso: 'Escuela de Líderes',
+      fechaInscripcion: '2026-05-10',
+      monto: 200,
+      status: { code: 'P', description: 'Pendiente', color: 'yellow' },
+    },
+    {
+      id: 3,
+      nombre: 'Carlos Ramírez',
+      curso: 'Discipulado Nivel 2',
+      fechaInscripcion: '2026-04-28',
+      monto: 150,
+      status: { code: 'R', description: 'Rechazado', color: 'red' },
+    },
+    {
+      id: 4,
+      nombre: 'Ana Torres',
+      curso: 'Matrimonios',
+      fechaInscripcion: '2026-06-01',
+      monto: 180.5,
+      status: { code: 'A', description: 'Activo', color: 'green' },
+    },
+    {
+      id: 5,
+      nombre: 'Luis Fernández',
+      curso: 'Escuela de Líderes',
+      fechaInscripcion: '2026-06-15',
+      monto: 2000,
+      status: { code: 'C', description: 'Cancelado', color: 'gray' },
+    },
+  ];
+
+
+
+    public tableOneColumns: DataTableColumn[] = [
+    { columnaName: 'Nombre', dataProperty: 'nombre', visible: true, sortable: true, alignment: 'left' },
+    { columnaName: 'Curso', dataProperty: 'curso', visible: true, sortable: true, alignment: 'left' },
+    {
+      columnaName: 'Fecha inscripción',
+      dataProperty: 'fechaInscripcion',
+      visible: true,
+      sortable: true,
+      alignment: 'center',
+      datatype: 'datetime',
+      format: "dddd dd 'de' MMMM 'de' YYYY",
+    },
+    {
+      columnaName: 'Monto',
+      dataProperty: 'monto',
+      visible: true,
+      sortable: true,
+      alignment: 'right',
+      datatype: 'number',
+      format: {
+        decimals: 3,
+        thousandSeparator: true,
+        currency: {
+          symbol: 'S/',
+          position: 'end',
+        },
+      },
+    },
+    { columnaName: 'Estado', dataProperty: 'status', visible: true, sortable: true, alignment: 'center' },
+  ];
+
+  
+
+
+    public tableOneActions: any[] = [
+    { action: 'ver', actionDescription: 'Ver detalle', icon: 'visibility', enabledForStatuses: [] },
+    {
+      action: 'cambiar_estado',
+      actionDescription: 'Cambiar estado',
+      icon: 'swap_horiz',
+      enabledForStatuses: ['A', 'P'],
+      subActions: [
+        { action: 'aprobar', label: 'Aprobar', icon: 'task_alt' },
+        { action: 'cancelar', label: 'Cancelar', icon: 'cancel' },
+      ],
+    },
+    { action: 'eliminar', actionDescription: 'Eliminar', icon: 'delete', enabledForStatuses: ['C', 'R'] },
+  ];
+
+
+
+
+    // Solo son seleccionables (checkbox) las filas cuyo status.code sea 'A' (Activo) o 'P' (Pendiente)
+  public tableOneSelectableRows: SelectableRowsConfig = {
+    columnName: 'status',
+    values: ['A', 'P'],
+  };
+
+  public tableOneSummary: DataTableSummaryConfig[] = [
+    { column: 'monto', summaryType: 'sum', position: 'end', format: 'Total: S/. {}' },
+    { column: 'monto', summaryType: 'avg', position: 'out-of-table', format: 'Promedio: {} US$' },
+  ];
+
+
+
+    public tableOneTotalRows: number = 5;
+  public tableOneTotalPages: number = 1;
+  public tableOneRowsPerPage: number = 10;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // ================= EJEMPLO 2: DbDataTableComponent (sin toolbar, sin selección) =================
+  public tableTwoData: any[] = [
+    {
+      orderId: 101,
+      instructor: 'Pedro Salas',
+      especialidad: 'Consejería familiar',
+      sede: 'Lima Norte',
+      email: 'pedro.salas@iglesia.pe',
+      status: { code: 'ACT', description: 'Activo', color: 'blue' },
+    },
+    {
+      orderId: 102,
+      instructor: 'Rosa Medina',
+      especialidad: 'Discipulado',
+      sede: 'Lima Sur',
+      email: 'rosa.medina@iglesia.pe',
+      status: { code: 'ACT', description: 'Activo', color: 'blue' },
+    },
+    {
+      orderId: 103,
+      instructor: 'Jorge Castillo',
+      especialidad: 'Liderazgo',
+      sede: 'Callao',
+      email: 'jorge.castillo@iglesia.pe',
+      status: { code: 'INA', description: 'Inactivo', color: 'gray' },
+    },
+    {
+      orderId: 104,
+      instructor: 'Sofía Vargas',
+      especialidad: 'Matrimonios',
+      sede: 'Lima Este',
+      email: 'sofia.vargas@iglesia.pe',
+      status: { code: 'SUS', description: 'Suspendido', color: 'orange' },
+    },
+  ];
+
+  public tableTwoColumns: DataTableColumn[] = [
+    { columnaName: 'Instructor', dataProperty: 'instructor', visible: true, sortable: true, alignment: 'left' },
+    { columnaName: 'Especialidad', dataProperty: 'especialidad', visible: true, sortable: true, alignment: 'left' },
+    { columnaName: 'Sede', dataProperty: 'sede', visible: true, sortable: true, alignment: 'center' },
+    { columnaName: 'Correo', dataProperty: 'email', visible: true, sortable: false, alignment: 'left' },
+    { columnaName: 'Estado', dataProperty: 'status', visible: true, sortable: true, alignment: 'center' },
+  ];
+
+  // Con más de 3 acciones el componente colapsa todo en un menú "more_vert"
+  public tableTwoActions: any[] = [
+    { action: 'ver', actionDescription: 'Ver perfil', icon: 'visibility', enabledForStatuses: [] },
+    { action: 'editar', actionDescription: 'Editar', icon: 'edit', enabledForStatuses: [] },
+    { action: 'suspender', actionDescription: 'Suspender', icon: 'block', enabledForStatuses: ['ACT'] },
+    { action: 'activar', actionDescription: 'Activar', icon: 'check_circle', enabledForStatuses: ['INA', 'SUS'] },
+    { action: 'eliminar', actionDescription: 'Eliminar', icon: 'delete', enabledForStatuses: [] },
+  ];
+
+  public tableTwoTotalRows: number = 4;
+  public tableTwoTotalPages: number = 1;
+  public tableTwoRowsPerPage: number = 10;
+
+
+  
+  
+  -->

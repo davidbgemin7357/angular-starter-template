@@ -1,0 +1,80 @@
+<div class="flex flex-col">
+  <input
+    #fileInput
+    type="file"
+    [attr.accept]="acceptAttr"
+    [attr.multiple]="multiple ? '' : null"
+    [disabled]="disabled"
+    class="hidden"
+    (change)="onChange($event)"
+  />
+
+  <div class="db-glass-control" [class]="containerClasses">
+    <button
+      type="button"
+      [disabled]="disabled"
+      class="db-glass-control"
+      [class]="selectButtonClasses"
+      (click)="fileInput.click()"
+    >
+      Seleccionar archivo
+      @if (required) {
+        <span class="ml-1 text-red-500">*</span>
+      }
+    </button>
+
+    <!-- Área del nombre -->
+    <span class="flex flex-1 items-center px-3 text-gray-500 truncate dark:text-gray-400">
+      {{ displayLabel }}
+    </span>
+
+    @if (showClearButton && selectedFileName) {
+      <button
+        type="button"
+        [disabled]="disabled"
+        [class]="'shrink-0 flex items-center px-3 ' + iconButtonClasses"
+        (click)="clearValue()"
+        aria-label="Limpiar archivo"
+        title="Limpiar archivo"
+      >
+        <svg viewBox="0 0 24 24" class="h-4 w-4 stroke-current" fill="none" aria-hidden="true">
+          <path d="M6 6l12 12" stroke-width="2" stroke-linecap="round" />
+          <path d="M18 6L6 18" stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
+    }
+  </div>
+
+  @if (multiple && selectedFiles.length) {
+    <ul class="mt-1 flex flex-col gap-1">
+      @for (file of selectedFiles; track file) {
+        <li
+          class="db-glass-control flex items-center justify-between gap-2 rounded-md bg-gray-50 px-2 py-1 text-xs text-gray-600 dark:bg-gray-800 dark:text-gray-300"
+        >
+          <span class="truncate">{{ file.name }}</span>
+          <button
+            type="button"
+            [disabled]="disabled"
+            [class]="'shrink-0 flex items-center ' + iconButtonClasses"
+            (click)="removeFile(file)"
+            aria-label="Eliminar archivo"
+            title="Eliminar archivo"
+          >
+            <svg viewBox="0 0 24 24" class="h-3 w-3 stroke-current" fill="none" aria-hidden="true">
+              <path d="M6 6l12 12" stroke-width="2" stroke-linecap="round" />
+              <path d="M18 6L6 18" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </button>
+        </li>
+      }
+    </ul>
+  }
+
+  <div class="min-h-6">
+    @if (errorMessage) {
+      <span class="text-xs text-red-500">{{ errorMessage }}</span>
+    } @else if (externalErrorMessage) {
+      <span class="text-xs text-red-500">{{ externalErrorMessage }}</span>
+    }
+  </div>
+</div>

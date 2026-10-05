@@ -1,0 +1,14 @@
+      <db-multi-select
+        [options]="[
+          { code: 1, text: 'Opción con imagen', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQs1OtM7dKWRBrkYKSSnldgGFOYJicEf-PpieXLBgTepd2TYEGWFViCaGKBv4Ei1BbvNiq7Fcr61tCbd26Exzgl0O0rsq2J6wE9KMSuNBU&s=10', height: 40, width: 40 },
+          { code: 2, text: 'Opción sin imagen' },
+          { code: 3, text: 'Otra opción con imagen (default 100x100)', url: 'https://i0.wp.com/puppis.blog/wp-content/uploads/2022/02/abc-cuidado-de-los-gatos-min.jpg?resize=521%2C346&ssl=1' },
+          { code: 4, text: 'Opción sin imagen' },
+          { code: 5, text: 'Opción sin imagen' },
+          { code: 6, text: 'Opción sin imagen' },
+        ]"
+        [placeholder]="'Seleccione estado solicitud'"
+        [label]="'Estado'"
+        [required]="true"
+        [showClearButton]="true"
+      ></db-multi-select>

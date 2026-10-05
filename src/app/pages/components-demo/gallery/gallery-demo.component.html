@@ -1,0 +1,45 @@
+<div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+  <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Gallery</h1>
+  <p class="mt-2 text-theme-sm text-gray-500 dark:text-gray-400">
+    Carrusel de imágenes con avance automático, botones de navegación, indicadores, arrastre y teclado
+    (flechas). Ocupa el alto de su contenedor. Selector: <code>&lt;db-gallery&gt;</code>.
+  </p>
+</div>
+
+<div class="mt-6 grid gap-6">
+  <db-card
+    [title]="'Por defecto'"
+    [desc]="'loop en true, slideshowDelay de 4000 ms, botones e indicador visibles y objectFit cover.'"
+  >
+    <div class="h-80">
+      <db-gallery [dataSource]="images"></db-gallery>
+    </div>
+  </db-card>
+
+  <db-card
+    [title]="'objectFit contain'"
+    [desc]="'La imagen se ve completa dentro del contenedor, sin recortes. objectFit: cover | contain | fill | none | scale-down.'"
+  >
+    <div class="h-80">
+      <db-gallery [dataSource]="portraitImages" [objectFit]="containFit"></db-gallery>
+    </div>
+  </db-card>
+
+  <db-card
+    [title]="'Sin botones ni indicador'"
+    [desc]="'showNavButtons y showIndicator en false: se navega arrastrando, con las flechas del teclado (con foco) o por el avance automático.'"
+  >
+    <div class="h-64">
+      <db-gallery [dataSource]="images" [showNavButtons]="false" [showIndicator]="false"></db-gallery>
+    </div>
+  </db-card>
+
+  <db-card
+    [title]="'Sin bucle y retardo propio'"
+    [desc]="'loop en false con slideshowDelay de 2000 ms: avanza cada 2 s y se detiene en la última imagen; los botones se deshabilitan en los extremos.'"
+  >
+    <div class="h-64">
+      <db-gallery [dataSource]="images" [loop]="false" [slideshowDelay]="customDelay"></db-gallery>
+    </div>
+  </db-card>
+</div>

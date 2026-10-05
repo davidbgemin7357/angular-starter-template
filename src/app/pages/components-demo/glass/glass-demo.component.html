@@ -1,0 +1,91 @@
+<div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+  <div class="flex flex-wrap items-start justify-between gap-4">
+    <div class="max-w-3xl">
+      <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Liquid Glass</h1>
+      <p class="mt-2 text-theme-sm text-gray-500 dark:text-gray-400">
+        Tema opcional que se combina con claro u oscuro. Se activa con la clase <code>.glass</code> en
+        <code>&lt;html&gt;</code> (botón del header o <code>ThemeService.setGlass()</code>). Esta página reúne
+        los casos que podrían romperse: dropdowns <code>fixed</code> dentro de cards, menús de la tabla,
+        tooltips, toasts, modal y popovers del editor.
+      </p>
+    </div>
+    <db-button [startIcon]="(themeService.glass$ | async) ? 'blur_off' : 'blur_on'" (btnClick)="themeService.toggleGlass()">
+      {{ (themeService.glass$ | async) ? 'Desactivar' : 'Activar' }} Liquid Glass
+    </db-button>
+  </div>
+</div>
+
+<div class="mt-6 grid gap-6 xl:grid-cols-2">
+  <db-card [title]="'Formulario dentro de una card'" [desc]="'Los dropdowns son position: fixed y deben abrir junto al control, sin recortarse.'">
+    <div class="grid gap-5 pt-2">
+      <db-text-box [label]="'Nombre'" [placeholder]="'Escribe tu nombre'" [icon]="'person'" />
+      <db-select-box [label]="'Ciudad'" [options]="cityOptions" [allowSearch]="true" [placeholder]="'Selecciona'" />
+      <db-multi-select [label]="'Etiquetas (arriba)'" [options]="tagOptions" [allowSearch]="true" />
+      <db-multi-select [label]="'Etiquetas (abajo)'" [options]="tagOptions" />
+      <db-date-picker [id]="'glass-date'" [label]="'Fecha'" [placeholder]="'Seleccione fecha'" [mode]="'single'" />
+    </div>
+  </db-card>
+
+  <db-card [title]="'Controles y feedback'" [desc]="'Botones, badges y switch reciben un brillo sutil; toasts y tooltips son paneles de vidrio.'">
+    <div class="flex flex-wrap items-center gap-3 pt-2">
+      <db-button>Primario</db-button>
+      <db-button [type]="'outline'">Outline</db-button>
+      <db-button [variant]="'success'">Éxito</db-button>
+      <db-button [variant]="'error'" [type]="'outline'">Error</db-button>
+    </div>
+    <div class="flex flex-wrap items-center gap-2">
+      <db-badge [color]="'primary'">Primary</db-badge>
+      <db-badge [color]="'success'" [variant]="'solid'">Solid</db-badge>
+      <db-badge [color]="'warning'">Warning</db-badge>
+      <db-badge [color]="'error'" [variant]="'solid'">Error</db-badge>
+    </div>
+    <div class="flex flex-wrap items-center gap-6">
+      <db-switch [label]="'Notificaciones'" [isChecked]="true" />
+      <db-checkbox [label]="'Recordarme'" />
+    </div>
+    <div class="flex flex-wrap items-center gap-3">
+      <span class="text-theme-sm text-gray-500 dark:text-gray-400">Toasts:</span>
+      <db-button [size]="'sm'" [variant]="'success'" (btnClick)="showToast('success')">success</db-button>
+      <db-button [size]="'sm'" [variant]="'error'" (btnClick)="showToast('error')">error</db-button>
+      <db-button [size]="'sm'" [variant]="'warning'" (btnClick)="showToast('warning')">warning</db-button>
+      <db-button [size]="'sm'" (btnClick)="showToast('primary')">primary</db-button>
+      <db-button [size]="'sm'" [type]="'outline'" (btnClick)="showToast('info')">info</db-button>
+    </div>
+    <div class="flex flex-wrap items-center gap-3">
+      <span #tip class="material-symbols-outlined cursor-help text-gray-500 dark:text-gray-400">help</span>
+      <db-tooltip [target]="tip" position="right">Tooltip de vidrio con flecha</db-tooltip>
+      <db-button [size]="'sm'" [startIcon]="'open_in_new'" (btnClick)="modalOpen.set(true)">Abrir modal</db-button>
+    </div>
+  </db-card>
+
+  <db-card class="xl:col-span-2" [title]="'Tabla'" [desc]="'Contenedor de vidrio; cabecera y pie fijos translúcidos. Prueba el menú de columnas y el de acciones.'">
+    <div class="h-96">
+      <db-data-table
+        [data]="rows"
+        [columns]="columns"
+        [actions]="actions"
+        [showToolbar]="true"
+        [showSearch]="true"
+        [zebraRows]="true"
+      ></db-data-table>
+    </div>
+  </db-card>
+
+  <db-card class="xl:col-span-2" [title]="'HTML Editor'" [desc]="'Barra, popovers (color, tabla, enlace, imagen) y etiqueta flotante sobre vidrio.'">
+    <div class="pt-2">
+      <db-html-editor [label]="'Contenido'" [height]="'220px'" [ngModel]="editorHtml" />
+    </div>
+  </db-card>
+</div>
+
+<db-modal [isOpen]="modalOpen()" [title]="'Modal de vidrio'" className="max-w-lg" (close)="modalOpen.set(false)">
+  <div class="grid gap-5 p-6">
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">
+      El panel del modal usa el filtro en un pseudo-elemento, así el select de abajo sigue abriendo en su lugar.
+    </p>
+    <db-select-box [label]="'Ciudad'" [options]="cityOptions" [placeholder]="'Selecciona'" />
+    <div class="flex justify-end">
+      <db-button (btnClick)="modalOpen.set(false)">Cerrar</db-button>
+    </div>
+  </div>
+</db-modal>

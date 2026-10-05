@@ -1,0 +1,161 @@
+<div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+  <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Date Picker</h1>
+  <p class="mt-2 text-theme-sm text-gray-500 dark:text-gray-400">
+    Selector de fecha y hora basado en flatpickr con modos single, multiple, range, time y datetime.
+    Selector: <code>&lt;db-date-picker&gt;</code>
+  </p>
+</div>
+
+<div class="mt-6 grid gap-6">
+  <db-card [title]="'Modos'" [desc]="'single, multiple, range, time y datetime.'">
+    <div class="grid gap-4 md:grid-cols-2">
+      <db-date-picker
+        [id]="'dp-single'"
+        [label]="'Fecha (single)'"
+        [placeholder]="'Seleccione fecha'"
+        [mode]="'single'"
+        (valueChange)="onValueChange('Single', $event)"
+      ></db-date-picker>
+
+      <db-date-picker
+        [id]="'dp-multiple'"
+        [label]="'Fechas (multiple)'"
+        [placeholder]="'Seleccione fechas'"
+        [mode]="'multiple'"
+        (valueChange)="onValueChange('Multiple', $event)"
+      ></db-date-picker>
+
+      <db-date-picker
+        [id]="'dp-range'"
+        [label]="'Rango (range)'"
+        [placeholder]="'Seleccione un rango'"
+        [mode]="'range'"
+        (valueChange)="onValueChange('Range', $event)"
+      ></db-date-picker>
+
+      <db-date-picker
+        [id]="'dp-time'"
+        [label]="'Hora (time)'"
+        [placeholder]="'Seleccione hora'"
+        [mode]="'time'"
+        (valueChange)="onValueChange('Time', $event)"
+      ></db-date-picker>
+
+      <db-date-picker
+        [id]="'dp-datetime'"
+        [label]="'Fecha y hora (datetime)'"
+        [placeholder]="'Seleccione fecha y hora'"
+        [mode]="'datetime'"
+        (valueChange)="onValueChange('Datetime', $event)"
+      ></db-date-picker>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Formatos'" [desc]="'format ymd (AAAA-MM-DD, por defecto) y dmy (DD-MM-AAAA).'">
+    <div class="grid gap-4 md:grid-cols-2">
+      <db-date-picker
+        [id]="'dp-format-ymd'"
+        [label]="'Formato ymd'"
+        [placeholder]="'AAAA-MM-DD'"
+        [format]="'ymd'"
+        (valueChange)="onValueChange('ymd', $event)"
+      ></db-date-picker>
+
+      <db-date-picker
+        [id]="'dp-format-dmy'"
+        [label]="'Formato dmy'"
+        [placeholder]="'DD-MM-AAAA'"
+        [format]="'dmy'"
+        (valueChange)="onValueChange('dmy', $event)"
+      ></db-date-picker>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Valor inicial y limpiar'" [desc]="'value inicial en cada modo, con showClearButton.'">
+    <div class="grid gap-4 md:grid-cols-2">
+      <db-date-picker
+        [id]="'dp-initial-single'"
+        [label]="'Single (2025-12-25)'"
+        [mode]="'single'"
+        [value]="'2025-12-25'"
+        [showClearButton]="true"
+        (valueChange)="onValueChange('Inicial single', $event)"
+      ></db-date-picker>
+
+      <db-date-picker
+        [id]="'dp-initial-dmy'"
+        [label]="'Single dmy (25-12-2025)'"
+        [mode]="'single'"
+        [format]="'dmy'"
+        [value]="'25-12-2025'"
+        [showClearButton]="true"
+        (valueChange)="onValueChange('Inicial dmy', $event)"
+      ></db-date-picker>
+
+      <db-date-picker
+        [id]="'dp-initial-multiple'"
+        [label]="'Multiple'"
+        [mode]="'multiple'"
+        [value]="multipleValue"
+        [showClearButton]="true"
+        (valueChange)="onValueChange('Inicial multiple', $event)"
+      ></db-date-picker>
+
+      <db-date-picker
+        [id]="'dp-initial-range'"
+        [label]="'Range'"
+        [mode]="'range'"
+        [value]="rangeValue"
+        [showClearButton]="true"
+        (valueChange)="onValueChange('Inicial range', $event)"
+      ></db-date-picker>
+
+      <db-date-picker
+        [id]="'dp-initial-time'"
+        [label]="'Time con segundos (14:30:45)'"
+        [mode]="'time'"
+        [value]="'14:30:45'"
+        [showClearButton]="true"
+        (valueChange)="onValueChange('Inicial time', $event)"
+      ></db-date-picker>
+
+      <db-date-picker
+        [id]="'dp-initial-datetime'"
+        [label]="'Datetime (25/12/2025 14:30)'"
+        [mode]="'datetime'"
+        [value]="datetimeValue"
+        [showClearButton]="true"
+        (valueChange)="onValueChange('Inicial datetime', $event)"
+      ></db-date-picker>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Estados'" [desc]="'required, error y disabled.'">
+    <div class="grid gap-4 md:grid-cols-2">
+      <db-date-picker
+        [id]="'dp-required'"
+        [label]="'Fecha (obligatoria)'"
+        [placeholder]="'Seleccione fecha'"
+        [required]="true"
+      ></db-date-picker>
+
+      <db-date-picker
+        [id]="'dp-error'"
+        [label]="'Fecha (error)'"
+        [placeholder]="'Seleccione fecha'"
+        [error]="true"
+      ></db-date-picker>
+
+      <db-date-picker
+        [id]="'dp-disabled'"
+        [label]="'Fecha (deshabilitada)'"
+        [value]="'2025-12-25'"
+        [disabled]="true"
+        [showClearButton]="true"
+      ></db-date-picker>
+    </div>
+  </db-card>
+</div>

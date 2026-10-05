@@ -1,0 +1,34 @@
+<!-- Requiere en angular.json (styles): "node_modules/quill/dist/quill.core.css" -->
+
+<!-- Editor completo con ngModel (todas las opciones de la barra) -->
+<db-html-editor
+  [label]="'Contenido'"
+  [(ngModel)]="html"
+  [height]="'400px'"
+/>
+
+<!-- Formulario reactivo con validación -->
+<db-html-editor
+  [label]="'Descripción'"
+  [required]="true"
+  formControlName="descripcion"
+  [error]="form.controls.descripcion.invalid && form.controls.descripcion.touched"
+  [hint]="'La descripción es obligatoria'"
+/>
+
+<!-- Barra personalizada en una sola línea -->
+<db-html-editor
+  [toolbar]="['bold', 'italic', 'underline', 'separator', 'orderedList', 'bulletList', 'separator', 'link']"
+  [toolbarMultiline]="false"
+  [height]="'180px'"
+  (valueChange)="onChange($event)"
+/>
+
+<!-- Límite de caracteres, solo lectura y deshabilitado -->
+<db-html-editor [maxLength]="200" />
+<db-html-editor [readOnly]="true" [(ngModel)]="html" />
+<db-html-editor [disabled]="true" [(ngModel)]="html" />
+
+<!-- Sin subida de imágenes (solo por URL) y límite de peso -->
+<db-html-editor [allowImageUpload]="false" />
+<db-html-editor [imageMaxSizeKb]="500" />

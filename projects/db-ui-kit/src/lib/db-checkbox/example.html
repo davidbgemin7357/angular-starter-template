@@ -1,0 +1,20 @@
+  <!-- Caso 1: text -->
+  <db-checkbox [text]="'Acepto los términos y condiciones'"></db-checkbox>
+
+  <!-- Caso 2: picture (con height/width por defecto = 100) -->
+  <db-checkbox
+    [text]="'Selecciona esta imagen'"
+    [picture]="{ url: 'https://picsum.photos/200' }"
+    [disabled]="true"
+  ></db-checkbox>
+
+  <!-- Caso 2b: picture con height/width personalizados -->
+  <db-checkbox
+    [text]="'Selecciona esta imagen (60x60)'"
+    [picture]="{ url: 'https://picsum.photos/200', height: 60, width: 60 }"
+  ></db-checkbox>
+
+  <!-- Caso 3: htmlContent -->
+  <db-checkbox
+    [htmlContent]="'Acepto recibir <strong>promociones</strong> por <em>correo electrónico</em>'"
+  ></db-checkbox>

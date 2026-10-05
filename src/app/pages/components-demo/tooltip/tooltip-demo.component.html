@@ -1,0 +1,128 @@
+<div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+  <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Tooltip</h1>
+  <p class="mt-2 text-theme-sm text-gray-500 dark:text-gray-400">
+    Globo flotante asociado a un elemento <code>target</code>, con flecha que apunta hacia él. El
+    contenido se proyecta (texto o cualquier plantilla) y respeta el tema claro/oscuro. Selector:
+    <code>&lt;db-tooltip&gt;</code>.
+  </p>
+</div>
+
+<div class="mt-6 grid gap-6">
+  <db-card [title]="'Modo por defecto'" [desc]="'Pasa el mouse sobre la imagen: tooltip de texto arriba del target con animación fade.'">
+    <div class="flex flex-wrap items-center gap-8">
+      <img
+        #remote
+        [src]="remoteImage"
+        alt="Control remoto"
+        class="h-24 w-36 cursor-pointer rounded-lg object-cover"
+      />
+      <db-tooltip [target]="remote">ExcelRemote IR</db-tooltip>
+
+      <span #ayuda class="material-symbols-outlined cursor-help text-gray-500 dark:text-gray-400">help</span>
+      <db-tooltip [target]="ayuda" position="right">Texto de ayuda breve</db-tooltip>
+    </div>
+  </db-card>
+
+  <db-card [title]="'Con plantilla'" [desc]="'El contenido proyectado puede ser cualquier plantilla: imagen, título y precio.'">
+    <div class="flex flex-wrap items-center gap-8">
+      <img
+        #tv
+        [src]="tvImage"
+        alt="Televisor"
+        class="h-20 w-28 cursor-pointer rounded-lg object-cover"
+      />
+      <db-tooltip [target]="tv" position="right" maxWidth="16rem">
+        <div class="flex flex-col items-center gap-2 py-1 text-center">
+          <img [src]="tvImage" alt="" class="h-32 w-48 rounded-md object-cover" />
+          <p class="font-semibold">SuperPlasma 50</p>
+          <p class="-mt-2 text-gray-500 dark:text-gray-400">2400$</p>
+        </div>
+      </db-tooltip>
+    </div>
+  </db-card>
+
+  <db-card [title]="'Con animación'" [desc]="'animation: fade (por defecto), pop (crece desde el lado del target) o none.'">
+    <div class="flex flex-wrap items-center gap-3">
+      @for (anim of animations; track anim) {
+        <span #animTarget class="inline-block">
+          <db-button size="sm" type="outline">{{ anim }}</db-button>
+        </span>
+        <db-tooltip [target]="animTarget" [animation]="anim">Animación: {{ anim }}</db-tooltip>
+      }
+    </div>
+  </db-card>
+
+  <db-card [title]="'Posiciones'" [desc]="'position: top, bottom, left o right. Si no hay espacio en la ventana se voltea al lado opuesto.'">
+    <div class="flex flex-wrap items-center justify-center gap-3 py-6">
+      @for (pos of positions; track pos) {
+        <span #posTarget class="inline-block">
+          <db-button size="sm" type="outline">{{ pos }}</db-button>
+        </span>
+        <db-tooltip [target]="posTarget" [position]="pos">Tooltip en {{ pos }}</db-tooltip>
+      }
+    </div>
+  </db-card>
+
+  <db-card [title]="'Eventos de apertura'" [desc]="'showEvent: click (se cierra con otro clic, clic fuera o Escape) o focus (al enfocar el campo).'">
+    <div class="flex flex-wrap items-start gap-6">
+      <span #clickTarget class="inline-block">
+        <db-button size="sm" startIcon="touch_app">Haz clic</db-button>
+      </span>
+      <db-tooltip
+        [target]="clickTarget"
+        showEvent="click"
+        position="bottom"
+        animation="pop"
+        (shown)="logEvent('shown (click)')"
+        (hidden)="logEvent('hidden (click)')"
+      >
+        <p class="font-semibold">Abierto con clic</p>
+        <p class="text-gray-500 dark:text-gray-400">Haz clic fuera o presiona Escape para cerrar.</p>
+      </db-tooltip>
+
+      <div #focusTarget class="w-full pt-2 sm:w-72">
+        <db-text-box [label]="'Código'" [placeholder]="'Enfoca este campo'"></db-text-box>
+      </div>
+      <db-tooltip [target]="focusTarget" showEvent="focus" position="right">
+        Mínimo 3 caracteres
+      </db-tooltip>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Retardo'" [desc]="'showDelay y hideDelay en milisegundos.'">
+    <div class="flex flex-wrap items-center gap-3">
+      <span #delayTarget class="inline-block">
+        <db-button size="sm" type="outline">showDelay 600 ms</db-button>
+      </span>
+      <db-tooltip [target]="delayTarget" [showDelay]="600">Apareció tras 600 ms</db-tooltip>
+
+      <span #hideDelayTarget class="inline-block">
+        <db-button size="sm" type="outline">hideDelay 1000 ms</db-button>
+      </span>
+      <db-tooltip [target]="hideDelayTarget" [hideDelay]="1000">Se oculta 1 s después de salir</db-tooltip>
+    </div>
+  </db-card>
+
+  <db-card [title]="'Controlado'" [desc]="'[(visible)] permite abrirlo o cerrarlo desde el padre; showArrow=false quita la flecha.'">
+    <div class="flex flex-wrap items-center gap-6">
+      <db-button size="sm" (btnClick)="toggleControlled()">
+        {{ controlledVisible() ? 'Ocultar' : 'Mostrar' }} tooltip
+      </db-button>
+
+      <span #controlledTarget class="rounded-md border border-dashed border-gray-300 px-3 py-1.5 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-300">
+        Objetivo
+      </span>
+      <db-tooltip
+        [target]="controlledTarget"
+        position="bottom"
+        [showArrow]="false"
+        [visible]="controlledVisible()"
+        (visibleChange)="handleVisibleChange($event)"
+      >
+        Controlado desde el padre
+      </db-tooltip>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+</div>

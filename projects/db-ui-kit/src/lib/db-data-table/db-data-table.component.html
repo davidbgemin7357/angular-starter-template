@@ -1,0 +1,605 @@
+<div class="flex h-full flex-col">
+  @if (summaryOutOfTableItems.length) {
+    <div class="flex shrink-0 flex-wrap gap-4 pb-2">
+      @for (item of summaryOutOfTableItems; track $index) {
+        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ getSummaryText(item) }}</span>
+      }
+    </div>
+  }
+
+  <div
+    class="db-glass-surface overflow-hidden rounded-sm border border-gray-300 bg-white flex flex-1 min-h-0 flex-col dark:border-gray-700 dark:bg-gray-900"
+  >
+  @if (showToolbar) {
+    <div
+      class="db-glass-control flex flex-col gap-2 border-b border-gray-300 bg-gray-50 px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between shrink-0 dark:border-gray-700 dark:bg-white/5"
+    >
+      <div class="flex items-center gap-2">
+        <span class="text-gray-500 text-sm dark:text-gray-400">Mostrar</span>
+        <div class="relative z-20 bg-transparent">
+          <select
+            class="db-glass-control h-8 w-full appearance-none rounded-sm border border-gray-300 bg-white py-1 pr-7 pl-2.5 text-sm text-gray-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+            [ngModel]="rowsPerPage"
+            (ngModelChange)="onPerPageChange($event)"
+          >
+            @for (opcion of rowsPerPageSelectOptions; track opcion) {
+              <option [ngValue]="opcion">{{ opcion }}</option>
+            }
+          </select>
+          <span
+            class="absolute top-1/2 right-1.5 z-30 -translate-y-1/2 text-gray-500 flex items-center"
+          >
+            <span class="material-symbols-outlined text-[18px]!"> keyboard_arrow_down </span>
+          </span>
+        </div>
+        <span class="text-gray-500 text-sm dark:text-gray-400">registros</span>
+      </div>
+
+      <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+        @if (showSearch) {
+          <div class="relative">
+            <span
+              class="absolute top-1/2 left-2.5 z-30 -translate-y-1/2 text-gray-400 flex items-center"
+            >
+              <span class="material-symbols-outlined text-[18px]!"> search </span>
+            </span>
+            <input
+              type="text"
+              placeholder="Buscar..."
+              [(ngModel)]="search"
+              (ngModelChange)="currentPage = 1"
+              [disabled]="toolbarDisabled"
+              class="db-glass-control h-8 w-full rounded-sm border border-gray-300 pr-3 pl-8 text-sm text-gray-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 xl:w-64 dark:border-gray-700 dark:text-white/90"
+              [ngClass]="
+                !toolbarDisabled
+                  ? 'bg-white dark:bg-gray-900'
+                  : 'cursor-not-allowed opacity-50 bg-gray-100 dark:bg-gray-800'
+              "
+            />
+          </div>
+        }
+        @if (showDownloadButton) {
+          <button
+            type="button"
+            (click)="downloadData()"
+            [disabled]="toolbarDisabled"
+            class="db-glass-control flex h-8 items-center justify-center gap-1.5 rounded-sm border border-gray-300 bg-white px-3 text-sm font-medium text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
+            [ngClass]="
+              !toolbarDisabled
+                ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-white/5'
+                : 'cursor-not-allowed opacity-50'
+            "
+          >
+            <span class="material-symbols-outlined text-[16px]!"> download </span> Descargar
+          </button>
+        }
+      </div>
+    </div>
+  }
+
+  <div class="relative flex min-h-0 flex-1 flex-col" [class.min-h-40]="isLoading" [attr.aria-busy]="isLoading">
+  <div class="max-w-full flex-1 overflow-y-auto overflow-x-auto">
+    <div class="min-w-250 min-h-full flex flex-col">
+      <div
+        cdkDropList
+        cdkDropListOrientation="horizontal"
+        [cdkDropListDisabled]="!reorderableColumns"
+        (cdkDropListDropped)="onColumnDrop($event)"
+        class="db-glass-panel grid border-b-2 border-gray-300 sticky top-0 bg-gray-100 z-10 dark:border-gray-700 dark:bg-gray-800"
+        [style.grid-template-columns]="gridTemplateColumns"
+      >
+        @if (selectMultiple) {
+          <div
+            class="flex items-center justify-center border-r border-gray-300 px-3 py-2 dark:border-gray-700"
+          >
+            <label class="flex cursor-pointer items-center select-none">
+              <span class="relative">
+                <input
+                  type="checkbox"
+                  class="sr-only"
+                  [checked]="isAllSelected()"
+                  (change)="onToggleAllChange($event)"
+                />
+
+                <span
+                  class="flex h-4 w-4 items-center justify-center rounded-sm border-[1.25px] transition-colors"
+                  [class.border-brand-500]="isAllSelected()"
+                  [class.bg-brand-500]="isAllSelected()"
+                  [class.border-gray-400]="!isAllSelected()"
+                  [class.dark:border-gray-600]="!isAllSelected()"
+                >
+                  <span
+                    *ngIf="isAllSelected()"
+                    class="material-symbols-outlined material-symbols-bold text-[14px]! text-white font-bold"
+                  >
+                    check
+                  </span>
+                </span>
+              </span>
+            </label>
+          </div>
+        }
+
+        @for (col of columns; track col.dataProperty) {
+          @if (col.visible) {
+            <div
+              cdkDrag
+              [cdkDragDisabled]="!reorderableColumns"
+              cdkDragLockAxis="x"
+              class="flex min-w-0 items-center border-r border-gray-300 px-3 py-2.5 dark:border-gray-700"
+            >
+              <div
+                class="flex w-full items-center justify-between gap-1"
+                [class.cursor-pointer]="col.sortable"
+                (click)="sortBy(col)"
+              >
+                <span class="flex min-w-0 items-center gap-1">
+                  @if (reorderableColumns) {
+                    <span
+                      cdkDragHandle
+                      class="material-symbols-outlined text-[16px]! shrink-0 cursor-move text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                    >
+                      drag_indicator
+                    </span>
+                  }
+                  <p class="text-xs font-semibold text-gray-700 dark:text-gray-300 wrap-break-word leading-tight">
+                    {{ col.columnaName }}
+                  </p>
+                </span>
+                <ng-container *ngIf="col.sortable">
+                  <ng-container
+                    *ngTemplateOutlet="
+                      sortIcons;
+                      context: { active: sortColumn === col.dataProperty, dir: sortDirection }
+                    "
+                  ></ng-container>
+                </ng-container>
+              </div>
+            </div>
+          }
+        }
+
+        @if (actions && actions.length > 0) {
+          <div class="flex items-center border-l border-gray-300 px-3 py-2.5 dark:border-gray-700">
+            <p class="text-xs font-semibold text-gray-700 dark:text-gray-300">{{ actionsColumnName }}</p>
+          </div>
+        }
+      </div>
+
+       @if (hasMergedColumns) {
+        <!-- flex-1 solo cuando no hay filas: asi el grid ocupa el alto que queda bajo la
+             cabecera y el mensaje de "sin resultados" puede centrarse verticalmente. Con
+             filas no se aplica, porque estirarlo repartiria ese alto sobrante entre ellas. -->
+        <div
+          class="grid"
+          [style.grid-template-columns]="gridTemplateColumns"
+          [class.flex-1]="!paginatedData.length"
+        >
+          <!-- rowIndex: alias obligatorio. Dentro del @for de columnas, $index pasa a ser el
+               indice de la columna y ya no el de la fila.
+               track por id: si el consumidor manda una clave estable, al insertarse una fila
+               las demas se reutilizan tal cual en vez de reescribirse todas una posicion mas
+               abajo. Sin id se cae a $index, el comportamiento historico. -->
+          @for (item of paginatedData; track item.id ?? $index; let rowIndex = $index) {
+            @if (selectMultiple) {
+              <div
+                class="flex items-center justify-center border-r border-t border-gray-200 px-3 py-2 dark:border-gray-800"
+                [style.grid-column]="1"
+                [style.grid-row]="rowIndex + 1"
+              >
+                <label
+                  class="flex items-center select-none"
+                  [class.cursor-pointer]="isItemSelectable(item)"
+                  [class.cursor-not-allowed]="!isItemSelectable(item)"
+                >
+                  <span class="relative">
+                    <input
+                      type="checkbox"
+                      class="sr-only"
+                      [(ngModel)]="item.checked"
+                      [disabled]="!isItemSelectable(item)"
+                    />
+                    <span
+                      class="flex h-4 w-4 items-center justify-center rounded-sm border-[1.25px] transition-colors"
+                      [ngClass]="rowCheckboxClasses(item)"
+                    >
+                      <span
+                        *ngIf="item.checked"
+                        class="material-symbols-outlined material-symbols-bold text-[14px]! text-white font-bold"
+                      >
+                        check
+                      </span>
+                    </span>
+                  </span>
+                </label>
+              </div>
+            }
+
+            @for (col of columns; track col.dataProperty) {
+              @if (col.visible && showCell(col, rowIndex)) {
+                <div
+                  class="flex min-w-0 items-center border-r border-t border-gray-200 px-3 py-2 dark:border-gray-800"
+                  [ngClass]="getAlignmentClass(col.alignment)"
+                  [style.grid-column]="columnGridIndex(col)"
+                  [style.grid-row]="
+                    cellSpan(col, rowIndex) > 1
+                      ? (rowIndex + 1) + ' / span ' + cellSpan(col, rowIndex)
+                      : rowIndex + 1
+                  "
+                >
+                  <ng-container
+                    *ngTemplateOutlet="cellValue; context: { item: item, col: col }"
+                  ></ng-container>
+                </div>
+              }
+            }
+
+            @if (actions && actions.length > 0) {
+              <div
+                class="flex items-center border-l border-t border-gray-200 px-3 py-2 dark:border-gray-800"
+                [style.grid-column]="actionsGridIndex()"
+                [style.grid-row]="rowIndex + 1"
+              >
+                <ng-container
+                  *ngTemplateOutlet="rowActions; context: { item: item }"
+                ></ng-container>
+              </div>
+            }
+          } @empty {
+            <!-- col-span-full: aqui el padre es el grid, asi que sin esto el mensaje caeria
+                 dentro de la primera columna (la mas estrecha) en vez de ocupar el ancho de
+                 la tabla. flex-1 no sirve para un item de grid. -->
+            <div class="col-span-full flex items-center justify-center p-6 text-center">
+              @if (!loading && !isLoading) {
+                <span class="text-gray-500">{{ noDataMessage }}</span>
+              }
+            </div>
+          }
+        </div>
+      } @else {
+       @for (item of paginatedData; track item.id ?? $index) {
+        <div
+          class="grid border-t border-gray-200 hover:bg-blue-50/60 dark:border-gray-800 dark:hover:bg-white/5 transition-colors"
+          [style.grid-template-columns]="gridTemplateColumns"
+          [ngClass]="{
+            'bg-blue-50 dark:bg-blue-500/10': item.checked,
+            'bg-gray-50 dark:bg-white/[0.02]': !item.checked && zebraRows && $odd
+          }"
+        >
+          @if (selectMultiple) {
+            <div
+              class="flex items-center justify-center border-r border-gray-200 px-3 py-2 dark:border-gray-800"
+            >
+              <label
+                class="flex items-center select-none"
+                [class.cursor-pointer]="isItemSelectable(item)"
+                [class.cursor-not-allowed]="!isItemSelectable(item)"
+              >
+                <span class="relative">
+                  <input
+                    type="checkbox"
+                    class="sr-only"
+                    [(ngModel)]="item.checked"
+                    [disabled]="!isItemSelectable(item)"
+                  />
+                  <span
+                    class="flex h-4 w-4 items-center justify-center rounded-sm border-[1.25px] transition-colors"
+                    [ngClass]="rowCheckboxClasses(item)"
+                  >
+                    <span
+                      *ngIf="item.checked"
+                      class="material-symbols-outlined material-symbols-bold text-[14px]! text-white font-bold"
+                    >
+                      check
+                    </span>
+                  </span>
+                </span>
+              </label>
+            </div>
+          }
+
+          @for (col of columns; track col.dataProperty) {
+            @if (col.visible) {
+              <div
+                class="flex min-w-0 items-center border-r border-gray-200 px-3 py-2 dark:border-gray-800"
+                [ngClass]="getAlignmentClass(col.alignment)"
+              >
+                <ng-container
+                  *ngTemplateOutlet="cellValue; context: { item: item, col: col }"
+                ></ng-container>
+              </div>
+            }
+          }
+
+          @if (actions && actions.length > 0) {
+            <div class="flex items-center border-l border-gray-200 px-3 py-2 dark:border-gray-800">
+              <ng-container
+                *ngTemplateOutlet="rowActions; context: { item: item }"
+              ></ng-container>
+            </div>
+          }
+        </div>
+      } @empty {
+      <!-- Sin columnas fusionadas el padre es el contenedor flex vertical, asi que aqui
+           flex-1 si toma el alto restante. -->
+      <div class="flex flex-1 items-center justify-center p-6 text-center">
+        @if (!loading && !isLoading) {
+                <span class="text-gray-500">{{ noDataMessage }}</span>
+              }
+      </div>
+      }
+      }
+
+      @if (summaryEndItems.length) {
+        <div
+          class="db-glass-panel grid border-t-2 border-gray-300 sticky bottom-0 z-10 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
+          [style.grid-template-columns]="gridTemplateColumns"
+        >
+          @if (selectMultiple) {
+            <div class="border-r border-gray-200 dark:border-gray-800"></div>
+          }
+
+          @for (col of columns; track col.dataProperty) {
+            @if (col.visible) {
+              <div
+                class="flex min-w-0 items-center border-r border-gray-200 px-3 py-2 dark:border-gray-800"
+                [ngClass]="getAlignmentClass(col.alignment)"
+              >
+                <p class="text-theme-sm font-semibold text-gray-700 dark:text-gray-300">
+                  {{ getSummaryTextForColumn(col.dataProperty) }}
+                </p>
+              </div>
+            }
+          }
+
+          @if (actions && actions.length > 0) {
+            <div class="border-l border-gray-200 dark:border-gray-800"></div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Loader solo sobre el área de datos (cabecera + filas): queda fuera del contenedor con
+       scroll, así no se desplaza al hacer scroll y no cubre el toolbar ni el paginador. -->
+  <db-loader [isVisible]="isLoading" [contained]="true"></db-loader>
+  </div>
+
+  <div class="db-glass-control border-t border-gray-300 bg-gray-50 py-2 pr-3 pl-3 dark:border-gray-700 dark:bg-white/5 shrink-0">
+    <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between">
+      <p
+        class="border-b border-gray-200 pb-2 text-center text-sm text-gray-500 xl:border-b-0 xl:pb-0 xl:text-left dark:border-gray-800 dark:text-gray-400"
+      >
+        Mostrando del {{ startEntry }} al {{ endEntry }} de {{ effectiveTotalRows }} registros
+      </p>
+
+      <div class="flex items-center justify-center gap-1 pt-2 xl:justify-end xl:pt-0">
+        <button type="button"
+          (click)="prevPage()"
+          [disabled]="currentPage === 1"
+          class="db-glass-control mr-1.5 flex items-center justify-center rounded-sm border border-gray-300 bg-white px-2.5 py-1.5 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/5"
+        >
+          Ant.
+        </button>
+
+        <button type="button"
+          (click)="goToPage(1)"
+          class="flex h-8 w-8 items-center justify-center rounded-sm border text-sm font-medium"
+          [ngClass]="
+            currentPage === 1
+              ? 'bg-brand-500 border-brand-500 text-white'
+              : 'border-transparent text-gray-700 hover:border-gray-300 hover:bg-gray-100 dark:text-gray-400 dark:hover:border-gray-700 dark:hover:bg-white/5'
+          "
+        >
+          1
+        </button>
+
+        @if (pagesAroundCurrent.length && pagesAroundCurrent[0] > 2) {
+          <span class="flex h-8 w-8 items-center justify-center text-gray-500 dark:text-gray-400"
+            >...</span
+          >
+        }
+
+        @for (page of pagesAroundCurrent; track page) {
+          <button type="button"
+            (click)="goToPage(page)"
+            class="flex h-8 w-8 items-center justify-center rounded-sm border text-sm font-medium"
+            [ngClass]="
+              currentPage === page
+                ? 'bg-brand-500 border-brand-500 text-white'
+                : 'border-transparent text-gray-700 hover:border-gray-300 hover:bg-gray-100 dark:text-gray-400 dark:hover:border-gray-700 dark:hover:bg-white/5'
+            "
+          >
+            {{ page }}
+          </button>
+        }
+
+        @if (
+          pagesAroundCurrent.length &&
+          pagesAroundCurrent[pagesAroundCurrent.length - 1] < effectiveTotalPages - 1
+        ) {
+          <span class="flex h-8 w-8 items-center justify-center text-gray-500 dark:text-gray-400"
+            >...</span
+          >
+        }
+
+        @if (effectiveTotalPages > 1) {
+          <button type="button"
+            (click)="goToPage(effectiveTotalPages)"
+            class="flex h-8 w-8 items-center justify-center rounded-sm border text-sm font-medium"
+            [ngClass]="
+              currentPage === effectiveTotalPages
+                ? 'bg-brand-500 border-brand-500 text-white'
+                : 'border-transparent text-gray-700 hover:border-gray-300 hover:bg-gray-100 dark:text-gray-400 dark:hover:border-gray-700 dark:hover:bg-white/5'
+            "
+          >
+            {{ effectiveTotalPages }}
+          </button>
+        }
+
+        <button type="button"
+          (click)="nextPage()"
+          [disabled]="currentPage === effectiveTotalPages || effectiveTotalPages === 0"
+          class="db-glass-control ml-1.5 flex items-center justify-center rounded-sm border border-gray-300 bg-white px-2.5 py-1.5 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/5"
+        >
+          Sig.
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<ng-template #sortIcons let-active="active" let-dir="dir">
+  <span
+    class="flex shrink-0 items-center justify-center text-gray-400 dark:text-gray-600"
+    [class.text-brand-500]="active"
+  >
+    <span class="material-symbols-outlined text-[18px]! leading-none">
+      {{ active ? (dir === 'asc' ? 'arrow_drop_up' : 'arrow_drop_down') : 'unfold_more' }}
+    </span>
+  </span>
+</ng-template>
+
+<ng-template #cellValue let-item="item" let-col="col">
+  <ng-container [ngSwitch]="col.dataProperty">
+    <ng-container *ngSwitchCase="'status'">
+      @if (getCellObject(item, col)) {
+        <span
+          class="text-theme-xs rounded-sm px-2 py-0.5 font-medium inline-flex items-center"
+          [ngClass]="getStatusClass(getCellObject(item, col)?.color ?? '')"
+        >
+          {{ getCellObject(item, col)?.description }}
+        </span>
+      }
+    </ng-container>
+
+    <!-- w-full solo en progress: la celda es un contenedor flex, asi que sin ancho declarado
+         este div se ajusta a su contenido y la barra acabaria midiendo su % contra el ancho
+         de su propio texto. El resto de tipos conserva el ancho por contenido. -->
+    <div *ngSwitchDefault [class.w-full]="col.datatype === 'progress'">
+      @if (col.datatype === 'boolean') {
+        <span
+          class="material-symbols-outlined text-[18px]!"
+          [ngClass]="getFormattedValue(item, col) ? 'text-success-500' : 'text-error-500'"
+        >
+          {{ getFormattedValue(item, col) ? 'check_circle' : 'cancel' }}
+        </span>
+      } @else if (col.datatype === 'progress') {
+        @if (getProgressCell(item, col); as progress) {
+          <div class="h-6 w-full rounded bg-gray-100 dark:bg-gray-800">
+            <!-- En cero no se pinta nada: ni el numero (se desbordaria fuera de una barra sin
+                 ancho) ni el padding. Lo segundo importa porque con box-sizing:border-box, si
+                 el ancho declarado es menor que el padding manda el padding: px-2 dejaria un
+                 resto naranja de 16px que se leeria como si hubiera algo de avance. -->
+            <div
+              class="progress-bar-fill flex h-6 items-center justify-end rounded bg-orange-400 text-xs font-semibold text-white"
+              [class.px-2]="progress.value > 0"
+              [style.width.%]="progressWidth(item, col)"
+            >
+              @if (progress.value > 0) {
+                {{ progress.value }}
+              }
+            </div>
+          </div>
+        }
+      } @else {
+        <p class="text-theme-sm text-gray-700 dark:text-gray-400">
+          {{ getFormattedValue(item, col) }}
+        </p>
+      }
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #rowActions let-item="item">
+  <div class="flex w-full items-center justify-center gap-1">
+    @if (actions.length < 4) {
+      @for (act of actions; track act.action) {
+        @if (isActionVisible(act, item)) {
+        @if (act.subActions && act.subActions.length > 0) {
+          <div class="relative">
+            <button type="button"
+              (click)="isActionEnabled(act, item) && toggleSubMenu($event, item, act.action)"
+              [title]="act.actionDescription"
+              [disabled]="!isActionEnabled(act, item)"
+              class="inline-flex h-7 w-7 items-center justify-center rounded-sm dark:text-gray-400"
+              [ngClass]="isActionEnabled(act, item)
+                ? 'hover:bg-gray-100 text-gray-500 hover:text-brand-500 cursor-pointer dark:hover:bg-white/5'
+                : 'text-gray-300 cursor-not-allowed dark:text-gray-700'"
+              [class.text-brand-500]="openSubMenuKey === (item.id || item.orderId) + '_' + act.action"
+              [class.bg-brand-50]="openSubMenuKey === (item.id || item.orderId) + '_' + act.action"
+            >
+              <span class="material-symbols-outlined text-[20px]!">{{ act.icon }}</span>
+            </button>
+            @if (openSubMenuKey === (item.id || item.orderId) + '_' + act.action) {
+              <div class="db-glass-panel absolute right-0 top-8 z-50 w-36 rounded-sm border border-gray-300 bg-white p-1 shadow-lg dark:border-gray-700 dark:bg-gray-900">
+                @for (sub of act.subActions; track sub.action) {
+                  <button type="button"
+                    (click)="executeAction(sub.action, item); openSubMenuKey = null"
+                    class="flex w-full items-center gap-2 rounded-sm px-2.5 py-1.5 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-400 dark:hover:bg-white/5"
+                  >
+                    <span class="material-symbols-outlined text-[16px]!">{{ sub.icon }}</span>
+                    <span>{{ sub.label }}</span>
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <button type="button"
+            (click)="isActionEnabled(act, item) && executeAction(act.action, item)"
+            [title]="act.actionDescription"
+            [disabled]="!isActionEnabled(act, item)"
+            class="inline-flex h-7 w-7 items-center justify-center rounded-sm dark:text-gray-400"
+            [ngClass]="
+              isActionEnabled(act, item)
+                ? 'text-gray-500 hover:text-brand-500 hover:bg-gray-100 cursor-pointer dark:hover:bg-white/5'
+                : 'text-gray-300 cursor-not-allowed dark:text-gray-700'
+            "
+          >
+            <span class="material-symbols-outlined text-[20px]!"> {{ act.icon }} </span>
+          </button>
+        }
+        }
+      }
+    } @else {
+      <div class="relative">
+        <button type="button"
+          (click)="toggleMenu($event, item)"
+          class="flex items-center justify-center text-gray-500 hover:text-brand-500 p-1 rounded-sm hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+          [class.text-brand-500]="openMenuId === (item.id || item.orderId)"
+        >
+          <span class="material-symbols-outlined text-[22px]!"> more_vert </span>
+        </button>
+
+        @if (openMenuId === (item.id || item.orderId)) {
+          <div
+            class="db-glass-panel fixed z-999 w-48 rounded-sm border border-gray-300 bg-white p-1.5 shadow-lg dark:border-gray-700 dark:bg-gray-900 animate-in fade-in zoom-in duration-150"
+            [ngStyle]="menuPosition"
+          >
+            @for (act of actions; track act.action) {
+              @if (isActionVisible(act, item)) {
+              <button type="button"
+                (click)="handleAction(act, item)"
+                [disabled]="!isActionEnabled(act, item)"
+                class="flex w-full items-center gap-3 rounded-sm px-3 py-2 text-left text-sm transition-colors"
+                [ngClass]="
+                  isActionEnabled(act, item)
+                    ? 'text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5'
+                    : 'text-gray-300 cursor-not-allowed dark:text-gray-600'
+                "
+              >
+                <span class="material-symbols-outlined text-[18px]!">
+                  {{ act.icon }}
+                </span>
+                <span>{{ act.actionDescription }}</span>
+              </button>
+              }
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</ng-template>

@@ -1,0 +1,115 @@
+<div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+  <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Text Area</h1>
+  <p class="mt-2 text-theme-sm text-gray-500 dark:text-gray-400">
+    Campo de texto multilínea con etiqueta flotante, filas configurables, límite de caracteres,
+    estado de error con hint y botón de limpiar. Implementa ControlValueAccessor. Selector:
+    <code>&lt;db-text-area&gt;</code>.
+  </p>
+</div>
+
+<div class="mt-6 grid gap-6">
+  <db-card [title]="'Básico'" [desc]="'Con label y placeholder (por defecto placeholder es Ingresa tu mensaje y rows es 3).'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-96">
+        <db-text-area [label]="'Comentario'" [placeholder]="'Escribe tu comentario'" (valueChange)="handleValue('Comentario', $event)" />
+      </div>
+      <div class="w-full pt-2 sm:w-96">
+        <db-text-area (valueChange)="handleValue('Sin etiqueta', $event)" />
+      </div>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Filas'" [desc]="'rows define la altura inicial; el textarea no es redimensionable (resize-none).'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-96">
+        <db-text-area [label]="'2 filas'" [rows]="2" />
+      </div>
+      <div class="w-full pt-2 sm:w-96">
+        <db-text-area [label]="'6 filas'" [rows]="6" />
+      </div>
+    </div>
+  </db-card>
+
+  <db-card [title]="'Límite de caracteres'" [desc]="'maxLength y minLength se aplican como atributos nativos; el contador lo arma el padre con el hint.'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-96">
+        <db-text-area
+          [label]="'Con límite'"
+          [placeholder]="'Máximo ' + maxLength + ' caracteres'"
+          [maxLength]="maxLength"
+          [hint]="limitedValue().length + ' / ' + maxLength"
+          (valueChange)="handleLimited($event)"
+        />
+      </div>
+    </div>
+  </db-card>
+
+  <db-card [title]="'Caracteres permitidos (regexp)'" [desc]="'regexp valida cada carácter al escribir o pegar; los que no cumplen se descartan. Los saltos de línea siempre se conservan.'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-96">
+        <db-text-area
+          [label]="'Solo letras y espacios'"
+          [regexp]="'[a-zA-ZáéíóúÁÉÍÓÚñÑ ]'"
+          (valueChange)="handleValue('Solo letras', $event)"
+        />
+      </div>
+      <div class="w-full pt-2 sm:w-96">
+        <db-text-area
+          [label]="'Solo números'"
+          [regexp]="digitsRegexp"
+          (valueChange)="handleValue('Solo números', $event)"
+        />
+      </div>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Error con hint'" [desc]="'error pinta el borde en rojo y el hint en rojo. A diferencia de text-box, el hint se muestra siempre.'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-96">
+        <db-text-area [label]="'Descripción'" [error]="true" [hint]="'La descripción no es válida'" />
+      </div>
+      <div class="w-full pt-2 sm:w-96">
+        <db-text-area [label]="'Observación'" [hint]="'Hint informativo sin error'" />
+      </div>
+    </div>
+  </db-card>
+
+  <db-card [title]="'Requerido'" [desc]="'required solo agrega el asterisco en la etiqueta; el error lo calcula el padre.'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-96">
+        <db-text-area
+          [label]="'Motivo'"
+          [required]="true"
+          [error]="requiredError"
+          [hint]="requiredError ? 'Este campo es obligatorio' : ''"
+          (valueChange)="handleRequired($event)"
+        />
+      </div>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Deshabilitado'" [desc]="'disabled bloquea la edición (y el botón de limpiar si lo hubiera).'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-96">
+        <db-text-area [label]="'Observaciones'" [disabled]="true" [placeholder]="'No editable'" />
+      </div>
+    </div>
+  </db-card>
+
+  <db-card [title]="'Botón de limpiar'" [desc]="'showClearButton muestra una X cuando hay contenido. El valor inicial se carga con ngModel.'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-96">
+        <db-text-area
+          [label]="'Notas'"
+          [showClearButton]="true"
+          [(ngModel)]="clearableValue"
+          (valueChange)="handleValue('Notas', $event)"
+        />
+      </div>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+</div>

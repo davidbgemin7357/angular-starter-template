@@ -1,0 +1,182 @@
+<div class="w-full">
+  <div class="relative">
+    @if (label) {
+      <label
+        class="db-glass-label absolute left-4 top-0 z-30 -translate-y-1/2 bg-white px-1 text-xs font-medium text-gray-600 dark:bg-gray-900 dark:text-gray-200 select-none"
+      >
+        {{ label }}
+        @if (required) {
+          <span class="ml-1 text-red-500">*</span>
+        }
+      </label>
+    }
+
+    <div class="relative z-20 inline-block w-full">
+    <div class="relative flex flex-col items-center">
+
+      <!-- Select box -->
+      <div #triggerRef (click)="toggleDropdown()" class="w-full">
+        <div
+          class="db-glass-control shadow-theme-xs flex min-h-11 gap-2 rounded-lg border px-3 py-2 transition"
+          [ngClass]="
+            disabled
+              ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed opacity-60 border-gray-200 dark:border-gray-700'
+              : 'cursor-pointer bg-transparent border-gray-300 dark:border-gray-700 dark:bg-gray-900'
+          "
+        >
+
+          <!-- Selected items + placeholder -->
+          <div class="flex flex-1 flex-wrap items-center gap-2">
+
+            <!-- Chips -->
+            @for (text of selectedValuesText; track $index; let i = $index) {
+              <div
+                class="db-glass-chip group flex items-center justify-center rounded-full border-[0.7px] border-transparent bg-gray-100 py-1 pr-2 pl-2.5 text-sm text-gray-800 hover:border-gray-200 dark:bg-gray-800 dark:text-white/90 dark:hover:border-gray-800"
+              >
+                <span>{{ text }}</span>
+
+                @if (!disabled) {
+                <button
+                  type="button"
+                  (click)="removeOption(selectedOptions[i]); $event.stopPropagation()"
+                  class="ml-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                >
+                  <svg class="fill-current" width="14" height="14" viewBox="0 0 14 14">
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M3.40717 4.46881C3.11428 4.17591 3.11428 3.70104 3.40717 3.40815C3.70006 3.11525 4.17494 3.11525 4.46783 3.40815L6.99943 5.93975L9.53095 3.40822C9.82385 3.11533 10.2987 3.11533 10.5916 3.40822C10.8845 3.70112 10.8845 4.17599 10.5916 4.46888L8.06009 7.00041L10.5916 9.53193C10.8845 9.82482 10.8845 10.2997 10.5916 10.5926C10.2987 10.8855 9.82385 10.8855 9.53095 10.5926L6.99943 8.06107L4.46783 10.5927C4.17494 10.8856 3.70006 10.8856 3.40717 10.5927C3.11428 10.2998 3.11428 9.8249 3.40717 9.53201L5.93877 7.00041L3.40717 4.46881Z"
+                    />
+                  </svg>
+                </button>
+                }
+              </div>
+            }
+
+            <!-- Placeholder -->
+            @if (selectedOptions.length === 0) {
+              <span class="text-sm text-gray-400 dark:text-gray-400">
+                {{placeholder}}
+              </span>
+            }
+
+          </div>
+
+          <!-- Clear button -->
+          @if (showClearButton && selectedOptions.length > 0 && !disabled) {
+            <button
+              type="button"
+              tabindex="-1"
+              [disabled]="disabled"
+              (click)="clearAll($event)"
+              class="flex items-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              aria-label="Limpiar selección"
+              title="Limpiar selección"
+            >
+              <svg viewBox="0 0 24 24" class="h-4 w-4 stroke-current" fill="none" aria-hidden="true">
+                <path d="M6 6l12 12" stroke-width="2" stroke-linecap="round" />
+                <path d="M18 6L6 18" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </button>
+          }
+
+          <!-- Arrow -->
+          <div class="flex items-start pt-1.5">
+            <svg
+              class="h-5 w-5 shrink-0 text-gray-500 transition-transform dark:text-gray-400"
+              [ngClass]="{ 'rotate-180': isOpen }"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              ></path>
+            </svg>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+  </div>
+
+  <!-- Dropdown: fuera de los wrappers con z-index (label z-30 / trigger z-20) a propósito —
+       esos `position:relative + z-index` crean su propio contexto de apilamiento local y
+       atrapan este panel `fixed` dentro de él. Si dos db-multi-select quedan uno debajo del
+       otro (p. ej. filtros de un listado), el que está más abajo en el DOM gana el empate de
+       ese contexto local y pinta encima del dropdown del de arriba, sin importar cuán alto
+       sea su z-index. Sacarlo del wrapper hace que compita directamente en el stacking
+       context raíz, donde el z-99999 sí gana. -->
+  @if (isOpen) {
+    <div
+      class="db-glass-panel fixed z-99999 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900"
+      [ngStyle]="dropdownPosition"
+      (click)="$event.stopPropagation()"
+    >
+      @if (allowSearch) {
+        <div class="border-b border-gray-200 p-2 dark:border-gray-800">
+          <input
+            type="text"
+            [value]="searchTerm"
+            (input)="onSearchTermChange($event)"
+            [placeholder]="searchPlaceholder"
+            class="db-glass-control w-full rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+          />
+        </div>
+      }
+      <div class="overflow-y-auto max-h-64">
+        @for (option of filteredOptions; track $index) {
+          <div
+            (click)="handleSelect(option.code)"
+            class="flex cursor-pointer items-center gap-2 border-b border-gray-200 px-4 py-3 text-sm transition last:border-b-0 dark:border-gray-800"
+            [ngClass]="
+              isOptionSelected(option.code)
+                ? 'bg-brand-50 dark:bg-brand-500/10'
+                : 'hover:bg-gray-50 dark:hover:bg-gray-800'
+            "
+          >
+            @if (option.url) {
+              <img
+                [src]="option.url"
+                [style.width.px]="getOptionWidth(option)"
+                [style.height.px]="getOptionHeight(option)"
+                class="rounded-md object-cover"
+                alt=""
+              />
+            }
+            <span
+              [ngClass]="
+                isOptionSelected(option.code)
+                  ? 'font-medium text-brand-600 dark:text-brand-400'
+                  : 'text-gray-800 dark:text-white/90'
+              "
+            >
+              {{ option.text }}
+            </span>
+
+            @if (isOptionSelected(option.code)) {
+              <svg
+                class="ml-auto h-4 w-4 shrink-0 fill-current text-brand-600 dark:text-brand-400"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M16.7 5.3a1 1 0 0 1 0 1.4l-7.5 7.5a1 1 0 0 1-1.4 0L3.3 9.7a1 1 0 1 1 1.4-1.4L8 11.6l6.8-6.8a1 1 0 0 1 1.4 0Z"
+                />
+              </svg>
+            }
+          </div>
+        }
+        @if (filteredOptions.length === 0) {
+          <div class="px-4 py-3 text-sm text-gray-400 dark:text-gray-500">Sin resultados</div>
+        }
+      </div>
+    </div>
+  }
+</div>

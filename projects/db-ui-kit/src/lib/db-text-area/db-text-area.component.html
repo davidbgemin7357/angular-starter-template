@@ -1,0 +1,54 @@
+<div class="w-full">
+  <div class="relative">
+    @if (label) {
+      <label class="db-glass-label absolute left-4 top-0 z-20 -translate-y-1/2 bg-white px-1 text-xs font-medium text-gray-600 dark:bg-gray-900 dark:text-gray-200 select-none">
+        {{ label }}
+        @if (required) {
+          <span class="ml-1 text-red-500">*</span>
+        }
+      </label>
+    }
+
+    <textarea
+      #textareaRef
+      [placeholder]="placeholder"
+      [rows]="rows"
+      [value]="value"
+      (input)="onInput($event)"
+      [disabled]="disabled"
+      [attr.maxLength]="maxLength"
+      [attr.minLength]="minLength"
+      class="db-glass-control resize-none"
+      [ngClass]="textareaClasses"
+      [style.padding-right.rem]="textareaPaddingRight"
+    ></textarea>
+
+    @if (showClearButton && value) {
+      <button
+        type="button"
+        tabindex="-1"
+        class="clear-button"
+        [disabled]="disabled"
+        (click)="clearValue()"
+        aria-label="Limpiar contenido"
+        title="Limpiar contenido"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 6l12 12" />
+          <path d="M18 6L6 18" />
+        </svg>
+      </button>
+    }
+
+    <div class="min-h-6">
+      @if (hint) {
+        <p
+          class="text-xs"
+          [ngClass]="error ? 'text-error-500' : 'text-gray-500 dark:text-gray-400'"
+        >
+          {{ hint }}
+        </p>
+      }
+    </div>
+  </div>
+</div>

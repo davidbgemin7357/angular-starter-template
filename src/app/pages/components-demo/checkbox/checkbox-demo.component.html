@@ -1,0 +1,76 @@
+<div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+  <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Checkbox</h1>
+  <p class="mt-2 text-theme-sm text-gray-500 dark:text-gray-400">
+    Casilla de verificación con texto, imagen o contenido HTML. Selector: <code>&lt;db-checkbox&gt;</code>
+  </p>
+</div>
+
+<div class="mt-6 grid gap-6">
+  <db-card [title]="'Label y text'" [desc]="'Texto mediante label o text, y estado checked inicial.'">
+    <div class="grid gap-4 md:grid-cols-2">
+      <db-checkbox
+        [id]="'cb-label'"
+        [label]="'Acepto los términos y condiciones'"
+        [checked]="termsAccepted()"
+        (valueChange)="onTermsChange($event)"
+      ></db-checkbox>
+
+      <db-checkbox
+        [id]="'cb-text'"
+        [text]="'Recordar mi sesión'"
+        (valueChange)="onValueChange('Text', $event)"
+      ></db-checkbox>
+
+      <db-checkbox
+        [id]="'cb-checked'"
+        [label]="'Marcado por defecto'"
+        [checked]="true"
+        (valueChange)="onValueChange('Checked', $event)"
+      ></db-checkbox>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Términos aceptados: {{ termsAccepted() }}</p>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Con imagen'" [desc]="'picture con tamaño por defecto (100x100) y personalizado (60x60).'">
+    <div class="grid gap-4 md:grid-cols-2">
+      <db-checkbox
+        [id]="'cb-picture'"
+        [text]="'Imagen por defecto'"
+        [picture]="defaultPicture"
+        (valueChange)="onValueChange('Imagen', $event)"
+      ></db-checkbox>
+
+      <db-checkbox
+        [id]="'cb-picture-small'"
+        [text]="'Imagen 60x60'"
+        [picture]="smallPicture"
+        (valueChange)="onValueChange('Imagen 60x60', $event)"
+      ></db-checkbox>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Contenido HTML'" [desc]="'htmlContent renderiza HTML enriquecido junto a la casilla.'">
+    <div class="grid gap-4 md:grid-cols-2">
+      <db-checkbox
+        [id]="'cb-html'"
+        [htmlContent]="htmlContent"
+        (valueChange)="onValueChange('HTML', $event)"
+      ></db-checkbox>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Deshabilitado'" [desc]="'disabled con y sin checked.'">
+    <div class="grid gap-4 md:grid-cols-2">
+      <db-checkbox [id]="'cb-disabled'" [label]="'Deshabilitado'" [disabled]="true"></db-checkbox>
+      <db-checkbox
+        [id]="'cb-disabled-checked'"
+        [label]="'Deshabilitado y marcado'"
+        [checked]="true"
+        [disabled]="true"
+      ></db-checkbox>
+    </div>
+  </db-card>
+</div>

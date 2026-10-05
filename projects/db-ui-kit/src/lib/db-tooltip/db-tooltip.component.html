@@ -1,0 +1,20 @@
+@if (isOpen) {
+  <div
+    #tooltipEl
+    role="tooltip"
+    [id]="tooltipId"
+    [class]="tooltipClasses"
+    [style.top.px]="placement.top"
+    [style.left.px]="placement.left"
+    [style.max-width]="maxWidth"
+    (mouseenter)="onTooltipMouseEnter()"
+    (mouseleave)="onTooltipMouseLeave()"
+  >
+    @if (showArrow) {
+      <span [class]="arrowClasses" [ngStyle]="arrowStyle" aria-hidden="true"></span>
+    }
+    <div class="relative">
+      <ng-content />
+    </div>
+  </div>
+}

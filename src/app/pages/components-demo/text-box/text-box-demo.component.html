@@ -1,0 +1,122 @@
+<div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+  <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Text Box</h1>
+  <p class="mt-2 text-theme-sm text-gray-500 dark:text-gray-400">
+    Campo de texto de una línea con etiqueta flotante, validación visual, filtro por expresión
+    regular, botón de limpiar e ícono. Implementa ControlValueAccessor. Selector:
+    <code>&lt;db-text-box&gt;</code>.
+  </p>
+</div>
+
+<div class="mt-6 grid gap-6">
+  <db-card [title]="'Tipos'" [desc]="'type: text, password o email. password agrega el botón de mostrar/ocultar; email valida el formato al salir del campo.'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-72">
+        <db-text-box [type]="'text'" [label]="'Nombre'" [placeholder]="'Ingresa tu nombre'" (valueChange)="handleValue('Nombre', $event)" />
+      </div>
+      <div class="w-full pt-2 sm:w-72">
+        <db-text-box [type]="'password'" [label]="'Contraseña'" [placeholder]="'Ingresa tu contraseña'" (valueChange)="handleValue('Contraseña', $event)" />
+      </div>
+      <div class="w-full pt-2 sm:w-72">
+        <db-text-box [type]="'email'" [label]="'Correo'" [placeholder]="'nombre@dominio.com'" (valueChange)="handleValue('Correo', $event)" />
+      </div>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Etiqueta y placeholder'" [desc]="'label es opcional: sin él solo se ve el placeholder.'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-72">
+        <db-text-box [label]="'Con etiqueta'" [placeholder]="'Placeholder de ejemplo'" />
+      </div>
+      <div class="w-full pt-2 sm:w-72">
+        <db-text-box [placeholder]="'Sin etiqueta, solo placeholder'" />
+      </div>
+      <div class="w-full pt-2 sm:w-72">
+        <db-text-box [label]="'Con valor inicial'" [value]="'Texto precargado'" />
+      </div>
+    </div>
+  </db-card>
+
+  <db-card [title]="'Estados: éxito y error'" [desc]="'success y error cambian el borde; el hint solo se muestra si required es true (o si type es email).'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-72">
+        <db-text-box [label]="'Usuario'" [value]="'dbaila'" [required]="true" [success]="true" [hint]="'Usuario disponible'" />
+      </div>
+      <div class="w-full pt-2 sm:w-72">
+        <db-text-box [label]="'Código'" [value]="'X1'" [required]="true" [error]="true" [hint]="'El código no existe'" />
+      </div>
+    </div>
+  </db-card>
+
+  <db-card [title]="'Requerido'" [desc]="'required agrega el asterisco en la etiqueta y reserva espacio para el hint. Aquí el error lo calcula el padre.'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-72">
+        <db-text-box
+          [label]="'Razón social'"
+          [placeholder]="'Campo obligatorio'"
+          [required]="true"
+          [error]="requiredError"
+          [success]="!requiredError"
+          [hint]="requiredError ? 'Este campo es obligatorio' : 'Correcto'"
+          (valueChange)="handleRequired($event)"
+        />
+      </div>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Deshabilitado'" [desc]="'disabled bloquea la edición y los botones internos.'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-72">
+        <db-text-box [label]="'No editable'" [value]="'Valor fijo'" [disabled]="true" [showClearButton]="true" />
+      </div>
+      <div class="w-full pt-2 sm:w-72">
+        <db-text-box [type]="'password'" [label]="'Contraseña'" [value]="'secreto'" [disabled]="true" />
+      </div>
+    </div>
+  </db-card>
+
+  <db-card [title]="'Filtro por regexp'" [desc]="'regexp se evalúa carácter por carácter: los que no coinciden se descartan al escribir. Acepta RegExp o string.'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-72">
+        <db-text-box [label]="'Solo números'" [placeholder]="'Ej. 987654321'" [regexp]="onlyNumbers" (valueChange)="handleValue('Solo números', $event)" />
+      </div>
+      <div class="w-full pt-2 sm:w-72">
+        <db-text-box [label]="'Solo letras'" [placeholder]="'Ej. Pérez'" [regexp]="onlyLetters" (valueChange)="handleValue('Solo letras', $event)" />
+      </div>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Botón de limpiar e ícono'" [desc]="'showClearButton muestra una X cuando hay valor; icon recibe un nombre de Material Symbols.'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-72">
+        <db-text-box [label]="'Buscar'" [value]="'Texto a borrar'" [showClearButton]="true" (valueChange)="handleValue('Buscar', $event)" />
+      </div>
+      <div class="w-full pt-2 sm:w-72">
+        <db-text-box [label]="'Usuario'" [icon]="'person'" [placeholder]="'Con ícono'" />
+      </div>
+      <div class="w-full pt-2 sm:w-72">
+        <db-text-box [type]="'password'" [label]="'Clave'" [icon]="'lock'" [showClearButton]="true" [value]="'123456'" />
+      </div>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Longitud mínima y máxima'" [desc]="'minLength y maxLength se aplican como atributos nativos (maxlength corta la escritura).'">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="w-full pt-2 sm:w-72">
+        <db-text-box
+          [label]="'Entre ' + minLength + ' y ' + maxLength + ' caracteres'"
+          [placeholder]="'Máximo ' + maxLength"
+          [minLength]="minLength"
+          [maxLength]="maxLength"
+          [required]="true"
+          [hint]="'Mínimo ' + minLength + ', máximo ' + maxLength + ' caracteres'"
+          (valueChange)="handleValue('Longitud', $event)"
+        />
+      </div>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+</div>

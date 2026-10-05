@@ -1,0 +1,53 @@
+<div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+  <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Switch</h1>
+  <p class="mt-2 text-theme-sm text-gray-500 dark:text-gray-400">
+    Interruptor on/off para valores booleanos. Selector: <code>&lt;db-switch&gt;</code>
+  </p>
+</div>
+
+<div class="mt-6 grid gap-6">
+  <db-card [title]="'Colores'" [desc]="'color blue (por defecto) y gray.'">
+    <div class="grid gap-4 md:grid-cols-2">
+      <db-switch
+        [label]="'Switch azul'"
+        [color]="'blue'"
+        (valueChange)="onValueChange('Azul', $event)"
+      ></db-switch>
+
+      <db-switch
+        [label]="'Switch gris'"
+        [color]="'gray'"
+        (valueChange)="onValueChange('Gris', $event)"
+      ></db-switch>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Activado inicialmente'" [desc]="'isChecked en true, con el estado reflejado en una señal.'">
+    <div class="grid gap-4 md:grid-cols-2">
+      <db-switch
+        [label]="'Notificaciones'"
+        [isChecked]="notificationsEnabled()"
+        (valueChange)="onNotificationsChange($event)"
+      ></db-switch>
+
+      <db-switch
+        [label]="'Modo gris activado'"
+        [color]="'gray'"
+        [isChecked]="true"
+        (valueChange)="onValueChange('Gris activado', $event)"
+      ></db-switch>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">
+      Notificaciones: {{ notificationsEnabled() ? 'activadas' : 'desactivadas' }}
+    </p>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Deshabilitado'" [desc]="'disabled con y sin isChecked.'">
+    <div class="grid gap-4 md:grid-cols-2">
+      <db-switch [label]="'Deshabilitado'" [disabled]="true"></db-switch>
+      <db-switch [label]="'Deshabilitado y activado'" [isChecked]="true" [disabled]="true"></db-switch>
+    </div>
+  </db-card>
+</div>

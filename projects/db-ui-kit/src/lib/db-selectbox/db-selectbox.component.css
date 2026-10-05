@@ -1,0 +1,14 @@
+.option-color-success {
+  background-color: #16a34a;
+  color: white;
+}
+
+.option-color-warning {
+  background-color: #f59e0b;
+  color: white;
+}
+
+.option-color-danger {
+  background-color: #dc2626;
+  color: white;
+}

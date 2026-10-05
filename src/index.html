@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('theme');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (stored === 'dark' || (!stored && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <meta charset="utf-8">
+  <title>Layout Lib</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- La fuente de iconos ya no se pide a Google: se sirve desde la propia app
+       (@import "material-symbols/outlined.css" en styles.css), porque los equipos
+       del taller no siempre tienen salida a internet. -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <!-- PWA (instalable). Al reutilizar esta base, cambia nombre y colores aquí y en
+       public/manifest.webmanifest, y reemplaza los íconos de public/icons. -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="description" content="Aplicación base con db-ui-kit">
+  <meta name="theme-color" content="#465fff">
+  <!-- iOS/Safari no lee el manifest para la pantalla de inicio: necesita estas metas. -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Layout Lib">
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+</head>
+<body>
+  <app-root></app-root>
+  <noscript>Activa JavaScript para usar esta aplicación.</noscript>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+  <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Data Table</h1>
+  <p class="mt-2 text-theme-sm text-gray-500 dark:text-gray-400">
+    Tabla de datos con columnas tipadas (texto, número, fecha, booleano, progreso), estados con color,
+    acciones por fila, resumen, barra de herramientas, paginado, selección múltiple, filas cebra, columnas
+    reordenables y fusión de celdas. Selector: <code>&lt;db-data-table&gt;</code>.
+  </p>
+</div>
+
+<div class="mt-6 grid gap-6">
+  <db-card
+    [title]="'Tabla completa'"
+    [desc]="'Tipos string / number (decimales, separador de miles, moneda) / datetime / boolean / progress, estado con color, acciones con subacciones y enabledForStatuses, resumen (avg, sum, count) y toolbar. El paginado se resuelve cortando la data local en currentPageEmit / rowsPerPageEmit.'"
+  >
+    <div class="h-100">
+      <db-data-table
+        [data]="pageData()"
+        [columns]="pedidoColumns"
+        [actions]="pedidoActions"
+        [summary]="pedidoSummary"
+        [showToolbar]="true"
+        [showSearch]="true"
+        [showDownloadButton]="true"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        [rowsPerPage]="rowsPerPage()"
+        [totalRows]="totalRows"
+        [totalPages]="totalPages()"
+        (currentPageEmit)="handlePage($event)"
+        (rowsPerPageEmit)="handleRowsPerPage($event)"
+        (emitAction)="handlePedidoAction($event)"
+      ></db-data-table>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card
+    [title]="'Selección múltiple'"
+    [desc]="'selectMultiple agrega la columna de checkboxes; selectableRows limita qué filas se pueden marcar (aquí solo estados Aprobado y Pendiente). La marca queda en la propiedad checked de cada fila.'"
+  >
+    <div class="h-90">
+      <db-data-table
+        [data]="seleccionData"
+        [columns]="seleccionColumns"
+        [selectMultiple]="true"
+        [selectableRows]="selectableRows"
+      ></db-data-table>
+    </div>
+    <div class="flex flex-wrap items-center gap-3">
+      <db-button [startIcon]="'checklist'" (btnClick)="showSelection()">Ver seleccionados</db-button>
+      <db-button [type]="'outline'" [startIcon]="'close'" (btnClick)="clearSelection()">Limpiar selección</db-button>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastSelectionEvent() }}</p>
+  </db-card>
+
+  <db-card
+    [title]="'Filas cebra, columnas reordenables y fusión de celdas'"
+    [desc]="'zebraRows alterna el fondo de las filas y reorderableColumns permite arrastrar las cabeceras desde su ícono. mergeRows fusiona celdas consecutivas con el mismo valor (la data debe venir pre-ordenada).'"
+  >
+    <div class="h-90">
+      <db-data-table
+        [data]="cebraData"
+        [columns]="cebraColumns"
+        [actions]="simpleActions"
+        [actionsColumnName]="''"
+        [actionsColumnWidth]="'60px'"
+        [zebraRows]="true"
+        [reorderableColumns]="true"
+        (emitAction)="handleSimpleAction($event)"
+      ></db-data-table>
+    </div>
+    <div class="h-90">
+      <db-data-table
+        [data]="tareaData"
+        [columns]="tareaColumns"
+        [summary]="tareaSummary"
+        [reorderableColumns]="true"
+      ></db-data-table>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastSimpleEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Sin datos'" [desc]="'Con data vacía la tabla muestra noDataMessage en lugar de las filas.'">
+    <div class="h-60">
+      <db-data-table
+        [data]="emptyData"
+        [columns]="seleccionColumns"
+        [showToolbar]="true"
+        [rowsPerPage]="10"
+        [noDataMessage]="'No se encontraron pedidos para los filtros seleccionados'"
+      ></db-data-table>
+    </div>
+  </db-card>
+
+  <db-card [title]="'Cargando datos (isLoading)'" [desc]="'isLoading muestra un loader solo sobre el área de datos (no sobre toolbar ni paginador) y deshabilita Buscar y Descargar. Aquí se simula un servidor: cambiar de página o de filas por página tarda 800 ms.'">
+    <div class="mb-3 flex flex-wrap gap-2">
+      <db-button size="sm" startIcon="refresh" [disabled]="loadingData()" (btnClick)="reloadData()">Recargar</db-button>
+      <db-button size="sm" type="outline" startIcon="delete_sweep" [disabled]="loadingData()" (btnClick)="clearAndLoad()">Vaciar y cargar</db-button>
+    </div>
+    <div class="h-110">
+      <db-data-table
+        [data]="loadingPageData()"
+        [columns]="pedidoColumns"
+        [isLoading]="loadingData()"
+        [showToolbar]="true"
+        [rowsPerPage]="loadingRowsPerPage()"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        [totalRows]="totalRows"
+        [totalPages]="loadingTotalPages()"
+        (currentPageEmit)="handleLoadingPage($event)"
+        (rowsPerPageEmit)="handleLoadingRowsPerPage($event)"
+      ></db-data-table>
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastLoadingEvent() }}</p>
+  </db-card>
+</div>

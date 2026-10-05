@@ -1,0 +1,47 @@
+<!-- botón con dropdown -->
+<db-button [disabled]="false" [variant]="'success'" [startIcon]="'close'" [endIcon]="'close'" [type]="'outline'"
+    [size]="'sm'" [dropdownItems]="[
+      { icon: 'close', text: 'Hola', code: 'HOL' },
+      { icon: 'favorite', text: 'Adiós', code: 'ADI' }
+    ]">
+    Hola
+</db-button>
+
+<db-button
+  [variant]="'primary'"
+  (dropdownItemClick)="onDropdownItemClick($event)"
+  [dropdownItems]="buttonDropdownItems"
+>Opciones</db-button>
+
+
+<!-- botón sin dropdown -->
+  <db-button
+    [disabled]="false"
+    [variant]="'success'"
+    [startIcon]="'close'"
+    [endIcon]="'close'"
+    [type]="'outline'"
+    [size]="'sm'"
+  >
+    Hola
+  </db-button>
+
+<!-- variantes de color -->
+<db-button [variant]="'primary'">Primary</db-button>
+<db-button [variant]="'error'">Error</db-button>
+<db-button [variant]="'warning'">Warning</db-button>
+<db-button [variant]="'success'">Success</db-button>
+
+<!-- tipo full vs outline -->
+<db-button [variant]="'primary'" [type]="'full'">Full</db-button>
+<db-button [variant]="'primary'" [type]="'outline'">Outline</db-button>
+
+<!-- tamaños -->
+<db-button [variant]="'primary'" [size]="'sm'">Small</db-button>
+<db-button [variant]="'primary'" [size]="'md'">Medium</db-button>
+
+<!-- solo ícono -->
+<db-button [variant]="'primary'" [startIcon]="'favorite'"></db-button>
+
+<!-- deshabilitado -->
+<db-button [variant]="'primary'" [disabled]="true">Deshabilitado</db-button>

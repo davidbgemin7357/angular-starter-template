@@ -1,0 +1,63 @@
+<div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+  <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Radio</h1>
+  <p class="mt-2 text-theme-sm text-gray-500 dark:text-gray-400">
+    Botón de opción para elegir un único valor dentro de un grupo que comparte <code>name</code>.
+    Selector: <code>&lt;db-radio&gt;</code>
+  </p>
+</div>
+
+<div class="mt-6 grid gap-6">
+  <db-card [title]="'Grupo de opciones'" [desc]="'Tres radios con el mismo name; el valor seleccionado se muestra abajo.'">
+    <div class="flex flex-col gap-3">
+      @for (option of planOptions; track option.id) {
+        <db-radio
+          [id]="option.id"
+          [name]="'radio-plan'"
+          [value]="option.value"
+          [label]="option.label"
+          [checked]="selectedPlan() === option.value"
+          (valueChange)="onPlanChange($event)"
+        ></db-radio>
+      }
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Seleccionado: "{{ selectedPlan() || 'ninguno' }}"</p>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Pre-marcado'" [desc]="'Grupo con una opción marcada inicialmente mediante checked.'">
+    <div class="flex flex-col gap-3">
+      @for (option of shippingOptions; track option.id) {
+        <db-radio
+          [id]="option.id"
+          [name]="'radio-shipping'"
+          [value]="option.value"
+          [label]="option.label"
+          [checked]="selectedShipping() === option.value"
+          (valueChange)="onShippingChange($event)"
+        ></db-radio>
+      }
+    </div>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Seleccionado: "{{ selectedShipping() }}"</p>
+    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Último evento: {{ lastEvent() }}</p>
+  </db-card>
+
+  <db-card [title]="'Deshabilitado'" [desc]="'disabled con y sin checked.'">
+    <div class="flex flex-col gap-3">
+      <db-radio
+        [id]="'radio-disabled-1'"
+        [name]="'radio-disabled'"
+        [value]="'a'"
+        [label]="'Opción deshabilitada'"
+        [disabled]="true"
+      ></db-radio>
+      <db-radio
+        [id]="'radio-disabled-2'"
+        [name]="'radio-disabled'"
+        [value]="'b'"
+        [label]="'Opción deshabilitada y marcada'"
+        [checked]="true"
+        [disabled]="true"
+      ></db-radio>
+    </div>
+  </db-card>
+</div>
