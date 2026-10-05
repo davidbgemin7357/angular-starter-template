@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { BadgeColor, BadgeSize, BadgeVariant, DbBadgeComponent, DbComponentCardComponent } from 'db-ui-kit';
+import { BadgeColor, BadgeSize, BadgeVariant, DbBadgeComponent, DbComponentCardComponent } from 'db-ui-kit-angular';
 
 /** Vitrina de db-badge: variantes light/solid por cada color, tamanos, iconos de Material
  * Symbols y los eventos iconClick / contentClick. */

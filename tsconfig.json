@@ -7,9 +7,6 @@
       "src/*": ["./src/*"],
       "@shared/*": [
         "./src/app/shared/*"
-      ],
-      "db-ui-kit": [
-        "./dist/db-ui-kit"
       ]
     },
     "resolveJsonModule": true,
@@ -39,12 +36,6 @@
     },
     {
       "path": "./tsconfig.spec.json"
-    },
-    {
-      "path": "./projects/db-ui-kit/tsconfig.lib.json"
-    },
-    {
-      "path": "./projects/db-ui-kit/tsconfig.spec.json"
     }
   ]
 }

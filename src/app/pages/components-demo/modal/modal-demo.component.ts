@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { DbButtonComponent, DbComponentCardComponent, DbModalComponent } from 'db-ui-kit';
+import { DbButtonComponent, DbComponentCardComponent, DbModalComponent } from 'db-ui-kit-angular';
 
 type ModalKey = 'normal' | 'fullscreen' | 'sinCerrar' | 'sinClickFuera';
 

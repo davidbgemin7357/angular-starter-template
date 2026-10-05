@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { DbButtonComponent, DbComponentCardComponent, DbToastComponent, DbToastService, ToastVariant, Variant } from 'db-ui-kit';
+import { DbButtonComponent, DbComponentCardComponent, DbToastComponent, DbToastService, ToastVariant, Variant } from 'db-ui-kit-angular';
 
 interface ToastExample {
   variant: ToastVariant;

@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { AlertModalMode, DbAlertModalComponent, DbButtonComponent, DbComponentCardComponent, Variant } from 'db-ui-kit';
+import { AlertModalMode, DbAlertModalComponent, DbButtonComponent, DbComponentCardComponent, Variant } from 'db-ui-kit-angular';
 
 interface AlertExample {
   mode: AlertModalMode;

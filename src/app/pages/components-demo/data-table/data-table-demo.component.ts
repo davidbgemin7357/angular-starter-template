@@ -10,7 +10,7 @@ import {
   DbComponentCardComponent,
   DbDataTableComponent,
   SelectableRowsConfig,
-} from 'db-ui-kit';
+} from 'db-ui-kit-angular';
 
 interface PedidoRow extends DataTableRow {
   id: number;

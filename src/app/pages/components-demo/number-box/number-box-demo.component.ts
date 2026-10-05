@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { DbComponentCardComponent, DbNumberBoxComponent } from 'db-ui-kit';
+import { DbComponentCardComponent, DbNumberBoxComponent } from 'db-ui-kit-angular';
 
 /** Vitrina de db-numberbox: basico, limites min/max, step con flechas, decimales, estados,
  * deshabilitado, boton de limpiar e icono. */

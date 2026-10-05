@@ -6,7 +6,7 @@ import {
   DbTooltipAnimation,
   DbTooltipComponent,
   DbTooltipPosition,
-} from 'db-ui-kit';
+} from 'db-ui-kit-angular';
 
 /** Vitrina de db-tooltip: texto simple, plantilla rica, animaciones, posiciones, eventos de
  * apertura, retardos y modo controlado. */

@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { DbComponentCardComponent, DbSwitchComponent } from 'db-ui-kit';
+import { DbComponentCardComponent, DbSwitchComponent } from 'db-ui-kit-angular';
 
 /** Vitrina de db-switch: colores blue/gray, estado inicial y deshabilitado. */
 @Component({

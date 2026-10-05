@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { DbComponentCardComponent, DbFileInputComponent, FileInputResult } from 'db-ui-kit';
+import { DbComponentCardComponent, DbFileInputComponent, FileInputResult } from 'db-ui-kit-angular';
 
 /** Vitrina de db-file-input: simple, extensiones permitidas, tamaño máximo, múltiple con
  * mínimo/máximo, error externo, obligatorio y deshabilitado. */

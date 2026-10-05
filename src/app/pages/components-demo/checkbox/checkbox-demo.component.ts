@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { CheckboxPicture, DbCheckboxComponent, DbComponentCardComponent } from 'db-ui-kit';
+import { CheckboxPicture, DbCheckboxComponent, DbComponentCardComponent } from 'db-ui-kit-angular';
 
 /** Vitrina de db-checkbox: label/text, marcado inicial, imagen, contenido HTML y
  * deshabilitado. */

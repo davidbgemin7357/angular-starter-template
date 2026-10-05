@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { DbComponentCardComponent, DbDatePickerComponent, DbDatePickerRangeValue } from 'db-ui-kit';
+import { DbComponentCardComponent, DbDatePickerComponent, DbDatePickerRangeValue } from 'db-ui-kit-angular';
 
 interface DatePickerChange {
   selectedDates: Date[];

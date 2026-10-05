@@ -5,7 +5,7 @@ import {
   DbConfirmModalComponent,
   DbConfirmModalOptions,
   DbConfirmModalService,
-} from 'db-ui-kit';
+} from 'db-ui-kit-angular';
 
 /** Vitrina de db-confirm-modal: uso declarativo con el output confirm y uso imperativo con
  * DbConfirmModalService.confirm(), que devuelve una Promise<boolean>. */

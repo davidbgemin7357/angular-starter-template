@@ -1,6 +1,6 @@
 # angular-starter-template
 
-Plantilla base para iniciar nuevos proyectos frontend con **Angular**. Incluye una estructura de carpetas organizada, un layout principal, autenticación base, soporte PWA y una librería interna de componentes reutilizables (**db-ui-kit**). Así cada proyecto nuevo arranca con la misma base y no hay que configurarlo desde cero.
+Plantilla base para iniciar nuevos proyectos frontend con **Angular**. Incluye una estructura de carpetas organizada, un layout principal, autenticación base, soporte PWA y la librería de componentes [**db-ui-kit-angular**](https://www.npmjs.com/package/db-ui-kit-angular) como dependencia. Así cada proyecto nuevo arranca con la misma base y no hay que configurarlo desde cero.
 
 ## Tecnologías
 
@@ -12,21 +12,35 @@ Plantilla base para iniciar nuevos proyectos frontend con **Angular**. Incluye u
 | [TypeScript](https://www.typescriptlang.org) | 5.9 | Lenguaje |
 | [Tailwind CSS](https://tailwindcss.com) | 4 | Estilos utilitarios (vía PostCSS) |
 | [RxJS](https://rxjs.dev) | 7.8 | Programación reactiva |
-| [ng-packagr](https://github.com/ng-packagr/ng-packagr) | 21 | Compilación de la librería `db-ui-kit` |
+| [db-ui-kit-angular](https://www.npmjs.com/package/db-ui-kit-angular) | 0.0.1 | Librería de componentes UI |
 | [flatpickr](https://flatpickr.js.org) | 4.6 | Selector de fechas |
 | [Quill](https://quilljs.com) | 2 | Editor de texto enriquecido |
 | [Material Symbols](https://fonts.google.com/icons) | 0.47 | Iconografía |
 | Vitest / Jasmine | — | Pruebas unitarias |
 
-## Librería de componentes `db-ui-kit`
+## Librería de componentes `db-ui-kit-angular`
 
-Ubicada en `projects/db-ui-kit`, se compila con ng-packagr y la aplicación la consume. Incluye:
+Los componentes vienen del paquete npm [`db-ui-kit-angular`](https://www.npmjs.com/package/db-ui-kit-angular), que se desarrolla en su propio repositorio ([db-ui-lib](https://github.com/davidbgemin7357/db-ui-lib)). Se importan así:
+
+```ts
+import { DbButtonComponent } from 'db-ui-kit-angular';
+```
+
+Incluye:
 
 - **Formularios:** `db-textbox`, `db-text-area`, `db-numberbox`, `db-selectbox`, `db-multi-select`, `db-checkbox`, `db-radio`, `db-switch`, `db-date-picker`, `db-file-input`, `db-html-editor`
 - **Visualización:** `db-button`, `db-badge`, `db-card`, `db-data-table`, `db-gallery`, `db-tooltip`, `db-loader`
 - **Feedback y diálogos:** `db-modal`, `db-alert-modal`, `db-confirm-modal`, `db-toast`
 
 Puedes ver todos los componentes en funcionamiento en la página de demo (`src/app/pages/components-demo`).
+
+Para que Tailwind genere las clases de los componentes, `src/styles.css` incluye `@source "../node_modules/db-ui-kit-angular";`. El tema (colores, variante `dark`, clases `db-glass-*`, estilos de flatpickr) también está definido en ese archivo.
+
+Para actualizar la librería a su última versión:
+
+```bash
+npm install db-ui-kit-angular@latest
+```
 
 ## Requisitos previos
 
@@ -45,10 +59,7 @@ cd angular-starter-template
 npm install
 ```
 
-> Si `npm install` muestra un error `ERESOLVE` por dependencias peer, ejecuta:
-> ```bash
-> npm install --legacy-peer-deps
-> ```
+> El archivo `.npmrc` activa `legacy-peer-deps` para evitar un conflicto `ERESOLVE` con la dependencia opcional `@angular/localize`.
 
 ## Arranque en local
 
@@ -56,7 +67,7 @@ npm install
 npm start
 ```
 
-Este comando compila primero la librería `db-ui-kit` y después levanta el servidor de desarrollo en **http://localhost:4200**.
+Levanta el servidor de desarrollo en **http://localhost:4200**.
 
 Para acceder desde otros dispositivos de tu red local (por ejemplo, un celular):
 
@@ -64,34 +75,18 @@ Para acceder desde otros dispositivos de tu red local (por ejemplo, un celular):
 npm run start:red
 ```
 
-### Desarrollo de la librería
-
-Si vas a modificar componentes de `db-ui-kit`, deja la librería en modo watch en una terminal y el servidor en otra:
-
-```bash
-# Terminal 1
-npm run watch:lib
-
-# Terminal 2
-npx ng serve
-```
-
 ## Scripts disponibles
 
 | Script | Descripción |
 |---|---|
-| `npm start` | Compila `db-ui-kit` y levanta `ng serve` |
+| `npm start` | Levanta el servidor de desarrollo (`ng serve`) |
 | `npm run start:red` | Igual que `start`, pero expuesto en la red (`--host 0.0.0.0`) |
-| `npm run build:lib` | Compila solo la librería `db-ui-kit` en `dist/db-ui-kit` |
-| `npm run watch:lib` | Compila la librería en modo watch (desarrollo) |
-| `npm run build` | Compila la librería y la aplicación para producción en `dist/layout-lib` |
+| `npm run build` | Compila la aplicación para producción en `dist/layout-lib` |
 | `npm test` | Ejecuta las pruebas unitarias |
 
 ## Estructura del proyecto
 
 ```
-├── projects/
-│   └── db-ui-kit/          # Librería de componentes reutilizables
 ├── public/                 # Assets públicos (iconos, manifest PWA)
 ├── src/
 │   ├── app/

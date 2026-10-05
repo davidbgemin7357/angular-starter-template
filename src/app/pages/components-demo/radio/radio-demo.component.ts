@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { DbComponentCardComponent, DbRadioComponent } from 'db-ui-kit';
+import { DbComponentCardComponent, DbRadioComponent } from 'db-ui-kit-angular';
 
 interface RadioDemoOption {
   id: string;

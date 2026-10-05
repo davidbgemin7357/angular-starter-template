@@ -8,7 +8,7 @@ import {
   DbHtmlEditorComponent,
   DbHtmlEditorFocusEvent,
   DbHtmlEditorToolbarItem,
-} from 'db-ui-kit';
+} from 'db-ui-kit-angular';
 
 const INITIAL_CONTENT = `
 <h2>Editor HTML de db-ui-kit</h2>

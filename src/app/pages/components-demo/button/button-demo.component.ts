@@ -7,7 +7,7 @@ import {
   Size,
   Type,
   Variant,
-} from 'db-ui-kit';
+} from 'db-ui-kit-angular';
 
 /** Vitrina de db-button: variantes de color, tipo full/outline, tamanos, deshabilitado,
  * iconos (nombres de Material Symbols) y desplegable de opciones. */

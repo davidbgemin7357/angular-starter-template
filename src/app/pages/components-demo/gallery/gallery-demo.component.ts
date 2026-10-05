@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { DbComponentCardComponent, DbGalleryComponent, ObjectFit } from 'db-ui-kit';
+import { DbComponentCardComponent, DbGalleryComponent, ObjectFit } from 'db-ui-kit-angular';
 
 /** Vitrina de db-gallery: carrusel por defecto, objectFit contain, sin controles y sin bucle
  * con retardo propio. El componente toma el alto de su contenedor (h-full). */

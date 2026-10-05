@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { DbComponentCardComponent, DbSelectBoxComponent, SelectBoxOption } from 'db-ui-kit';
+import { DbComponentCardComponent, DbSelectBoxComponent, SelectBoxOption } from 'db-ui-kit-angular';
 
 /** Vitrina de db-select-box: variantes de label, opciones con color/icono, búsqueda, botón
  * limpiar, estados de validación, deshabilitado y valor por defecto. */

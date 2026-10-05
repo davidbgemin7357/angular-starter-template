@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { DbBadgeComponent, DbButtonComponent, DbComponentCardComponent } from 'db-ui-kit';
+import { DbBadgeComponent, DbButtonComponent, DbComponentCardComponent } from 'db-ui-kit-angular';
 
 /** Vitrina de db-card: solo titulo, con descripcion, con acciones en la cabecera
  * (slot [cardActions]) y con clases extra via className. */

@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DbComponentCardComponent, DbMultiSelectComponent, MultiSelectOption } from 'db-ui-kit';
+import { DbComponentCardComponent, DbMultiSelectComponent, MultiSelectOption } from 'db-ui-kit-angular';
 
 /** Vitrina de db-multi-select: selección múltiple con búsqueda, botón limpiar, opciones con
  * imagen, obligatorio y deshabilitado. */

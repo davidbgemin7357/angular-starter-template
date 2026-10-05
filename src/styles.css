@@ -9,6 +9,10 @@ layer(base);
 
 @import "tailwindcss";
 
+/* db-ui-kit-angular vive en node_modules, que Tailwind no escanea por defecto: sin esto no se
+   generarian las clases que usan las plantillas de sus componentes. */
+@source "../node_modules/db-ui-kit-angular";
+
 @custom-variant dark (&:is(.dark *));
 
 @theme {
@@ -541,10 +545,13 @@ span.flatpickr-weekday,
 .flatpickr-calendar.static {
   @apply right-0;
 }
-.flatpickr-calendar.hasTime {
-  width: 300px !important;
+/* La grilla de días de flatpickr mide 307.875px fijos (.flatpickr-days / .dayContainer). Con
+   box-sizing:border-box y el borde de 1px del calendario, el contenedor necesita ese ancho más
+   2px; si es más angosto, la última columna (Dom) queda recortada a la derecha. */
+.flatpickr-calendar:not(.noCalendar) {
+  width: calc(307.875px + 2px) !important;
 }
-/* Selector de hora solo (sin calendario): el ancho de 300px heredado del calendario deja
+/* Selector de hora solo (sin calendario): el ancho del calendario completo deja
    demasiado espacio entre "12 : 00 PM", ya que numInputWrapper reparte ese ancho en
    porcentajes fijos (40%/40%/18%). Se angosta para que el padding se vea proporcional al
    contenido. */

@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DbComponentCardComponent, DbTextAreaComponent } from 'db-ui-kit';
+import { DbComponentCardComponent, DbTextAreaComponent } from 'db-ui-kit-angular';
 
 /** Vitrina de db-text-area: basico, filas, limite de caracteres, error con hint, requerido,
  * deshabilitado y boton de limpiar. db-text-area no expone [value] como input: el valor

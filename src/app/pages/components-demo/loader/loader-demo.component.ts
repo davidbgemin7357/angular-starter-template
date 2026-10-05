@@ -1,5 +1,5 @@
 import { Component, OnDestroy, signal } from '@angular/core';
-import { DbButtonComponent, DbComponentCardComponent, DbLoaderComponent } from 'db-ui-kit';
+import { DbButtonComponent, DbComponentCardComponent, DbLoaderComponent } from 'db-ui-kit-angular';
 
 const LOADER_DURATION_MS = 2000;
 

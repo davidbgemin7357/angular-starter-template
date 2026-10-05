@@ -20,7 +20,7 @@ import {
   DbTooltipComponent,
   MultiSelectOption,
   SelectBoxOption,
-} from 'db-ui-kit';
+} from 'db-ui-kit-angular';
 import { ThemeService } from '@shared/services/theme.service';
 
 /** Vitrina del tema Liquid Glass. Junta en una sola pantalla los casos delicados del efecto:

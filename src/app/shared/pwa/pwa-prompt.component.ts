@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { DbButtonComponent } from 'db-ui-kit';
+import { DbButtonComponent } from 'db-ui-kit-angular';
 import { PwaInstallService } from './pwa-install.service';
 import { PwaUpdateService } from './pwa-update.service';
 

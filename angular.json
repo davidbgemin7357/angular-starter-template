@@ -79,35 +79,6 @@
           "builder": "@angular/build:unit-test"
         }
       }
-    },
-    "db-ui-kit": {
-      "projectType": "library",
-      "root": "projects/db-ui-kit",
-      "sourceRoot": "projects/db-ui-kit/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular/build:ng-packagr",
-          "options": {
-            "project": "projects/db-ui-kit/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/db-ui-kit/tsconfig.lib.prod.json"
-            },
-            "development": {
-              "tsConfig": "projects/db-ui-kit/tsconfig.lib.json"
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular/build:unit-test",
-          "options": {
-            "tsConfig": "projects/db-ui-kit/tsconfig.spec.json"
-          }
-        }
-      }
     }
   }
 }

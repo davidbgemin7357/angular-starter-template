@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { DbComponentCardComponent, DbTextBoxComponent } from 'db-ui-kit';
+import { DbComponentCardComponent, DbTextBoxComponent } from 'db-ui-kit-angular';
 
 /** Vitrina de db-text-box: tipos text/password/email, estados, requerido, deshabilitado,
  * filtro por regexp, boton de limpiar, icono y limites de longitud. */

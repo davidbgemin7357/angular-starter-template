@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { DbTextBoxComponent, DbLoaderComponent, DbButtonComponent, DbAlertModalComponent } from 'db-ui-kit';
+import { DbTextBoxComponent, DbLoaderComponent, DbButtonComponent, DbAlertModalComponent } from 'db-ui-kit-angular';
 import { TrackingValidatorService } from '@shared/services/tracking-validator.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/core/services/auth.service';
